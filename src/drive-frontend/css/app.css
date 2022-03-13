@@ -1,0 +1,191 @@
+.main-page {
+    display: flex;
+    height: 100%;
+    overflow: hidden;
+    flex-direction: column;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+.page-grid {
+    display: grid;
+    height: 100%;
+    grid-template-areas:
+        "mesg mesg mesg mesg"
+        "head head head c-sh"
+        "navp vwgr c-sw c-sh"
+        "navp vwgr c-sw c-sh";
+    grid-template-columns: auto 1fr auto auto;
+    grid-template-rows: auto auto auto 1fr;
+}
+
+.page-grid .header {
+    border-bottom: 1px solid #dadce0;
+    grid-area: head;
+    margin-top: -1px;
+    z-index: 6;
+    padding: 8px;
+    box-sizing: border-box;
+    position: relative;
+    width: 100%;
+    display:flex;
+    justify-content: space-between;
+    min-width: min-content;
+}
+
+    .header header {
+        display: flex !important;
+    }
+
+    .header .logo {
+        min-width: 238px;
+        padding-right: 30px;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        -webkit-flex: 1 0 auto;
+        flex: 1 0 auto;
+        height: 48px;
+        vertical-align: middle;
+        white-space: nowrap;
+        -webkit-box-align: center;
+        -webkit-align-items: center;
+        align-items: center;
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: flex;
+    }
+
+    .header .search-area {
+        -webkit-box-pack: center;
+        justify-content: flex-start;
+        height: 48px;
+        vertical-align: middle;
+        white-space: nowrap;
+        -webkit-box-align: center;
+        -webkit-align-items: center;
+        align-items: center;
+        display: flex;
+        flex: 1 1 100%;
+    }
+
+    .header .account-info {
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        height: 48px;
+        line-height: normal;
+        padding: 0 4px;
+        padding-left: 30px;
+        -webkit-flex: 0 0 auto;
+        flex: 0 0 auto;
+        -webkit-box-pack: flex-end;
+        -webkit-justify-content: flex-end;
+        justify-content: flex-end;
+        vertical-align: middle;
+        white-space: nowrap;
+        -webkit-box-align: center;
+        -webkit-align-items: center;
+        align-items: center;
+        display: flex;
+    }
+
+.side-menu {
+    position:relative;
+    border-right: 1px solid transparent;
+    grid-area: navp;
+    max-width: 394px;
+    min-width: 256px;
+    overflow: hidden;
+}
+
+.file-area {
+    display: grid;
+    grid-area: vwgr;
+    grid-template-areas:
+        "tlbr tlbr"
+        "view info";
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto 1fr;
+    height: 100%;
+    z-index: 0;
+}
+
+.contents {
+    grid-area: view;
+    overflow: hidden;
+    position: relative;
+}
+
+.details {
+    grid-area: info;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    background-color: #fff;
+    border-left: 1px solid #dadce0;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    height: 100%;
+    max-width: 100%;
+    min-width: 320px;
+}
+
+.details .tab-area {
+    -webkit-flex: 0 0 auto;
+    flex: 0 0 auto;
+    background-color: rgba(0,0,0,0);
+    border-left: 1px solid transparent;
+    margin: 0 0 0 -1px;
+    padding-top: 8px;
+}
+
+.details .detail-area {
+    -webkit-flex: 1 1 auto;
+    flex: 1 1 auto;
+    border-left: 1px solid transparent;
+    margin-left: -1px;
+    position: relative;
+}
+
+.menu-items {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    height: 100%;
+    overflow: visible;
+    width: 100%;
+}
+
+.sidebar {
+    bottom: 0;
+    cursor: col-resize;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 5px;
+}
+
+.files {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-flex: 1 0 auto;
+    -webkit-flex: 1 0 auto;
+    flex: 1 0 auto;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+}
+
+.file-grid {
+    display: grid;
+    grid-gap: 0;
+    grid-template-columns: repeat(auto-fill,minmax(220px,1fr));
+}
+
+.file {
+    display:block;
+}
