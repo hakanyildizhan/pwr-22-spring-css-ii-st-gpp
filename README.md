@@ -1,6 +1,6 @@
-# System Security I Group Programming Project Readme
+# Computer Security and Cryptography II st. PWR 2022 Spring Group Programming Project Readme
 
-Our group project work for the Sys. Security I class.
+Our group project work for the 2022 spring semester.
 
 ## Contributors
 
