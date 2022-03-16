@@ -1,9 +1,12 @@
 @startuml
+|Client|
 start
+|Client|
 :Enter the email;
 :Enter the password;
 :Click login button;
 :Send HTTP login request to the server;
+|Server|
 :Validate input;
 if (Input valid) then
  ->Yes;
@@ -22,5 +25,7 @@ else
  -> No;
  :Return error;
 endif
+|Client|
+:Return response;
 stop
 @enduml
