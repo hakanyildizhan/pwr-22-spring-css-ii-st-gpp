@@ -1,0 +1,15 @@
+@startuml
+start
+:Login successfully;
+:Click upload item button;
+:Chose the file from your PC;
+if (File uploaded successfully) then
+ ->Yes;
+ :Click the button for upload confirmation;
+ :See your file on the webpage;
+else
+ ->No;
+ :Close the modal for file selection;
+endif
+stop
+@enduml

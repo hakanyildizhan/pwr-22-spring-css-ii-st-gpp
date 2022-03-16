@@ -1,0 +1,17 @@
+@startuml
+start
+:Login successfully;
+:Open the subpage with your files;
+:Select the file;
+->Modal opens;
+if (Sharing by email (Y) or by link (N)) then
+ -> Yes;
+ :Enter the email of a user you want to share the file with;
+else
+ -> No;
+ :Click the button for link generation;
+ :Copy generated link;
+endif
+:Close the modal;
+stop
+@enduml

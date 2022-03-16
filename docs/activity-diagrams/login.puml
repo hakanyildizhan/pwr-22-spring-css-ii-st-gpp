@@ -1,0 +1,31 @@
+@startuml
+|Client|
+start
+|Client|
+:Enter the email;
+:Enter the password;
+:Click login button;
+:Send HTTP login request to the server;
+|Server|
+:Validate input;
+if (Input valid) then
+ ->Yes;
+ :Hash password;
+ :Call DB for a record with email and hashed password;
+ if (Given credentials are in DB) then
+  ->Yes;
+  :Return true;
+  :Generate JWT hash;
+  :Return OK response with valid JWT token;
+ else
+  ->No;
+  :Return error;
+ endif
+else
+ -> No;
+ :Return error;
+endif
+|Client|
+:Return response;
+stop
+@enduml

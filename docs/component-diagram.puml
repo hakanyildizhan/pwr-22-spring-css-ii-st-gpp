@@ -1,0 +1,18 @@
+@startuml
+
+package "Frontend" {
+    [Web application]
+}
+
+package "Backend" {
+    HTTP - [Web server]
+    [Web application] --> HTTP
+}
+
+database "DB" {
+    frame "Database"
+}
+
+[Web server] --> [Database]
+
+@enduml
