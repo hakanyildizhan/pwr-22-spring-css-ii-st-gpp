@@ -1,7 +1,29 @@
 @startuml
+|Client|
 start
-:Login successfully;
-:Click view item button;
-:See your file on the webpage;
+|Client|
+:Send request to fetch drive items;
+|Server|
+:Sends response with drive items;
+|Client|
+:Click specific item;
+:Send request to fetch actual specific file;
+|Server|
+:Validate;
+if (file exists) then
+ ->Yes;
+ if (does the user has access) then
+  ->Yes;
+  :Return OK response;
+ else
+  ->No;
+  :Return error;
+ endif
+else
+ -> No;
+ :Return error;
+endif
+|Client|
+:Return response;
 stop
 @enduml
