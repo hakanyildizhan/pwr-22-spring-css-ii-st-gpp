@@ -2,12 +2,13 @@
 |Client|
 start
 |Client|
+:Login successfully;
 :Send request to fetch drive items;
 |Server|
 :Sends response with drive items;
 |Client|
-:Click specific item;
-:Send request to fetch actual specific file;
+:Click download icon on specific item;
+:Send request to download file;
 |Server|
 :Validate;
 if (file exists) then
