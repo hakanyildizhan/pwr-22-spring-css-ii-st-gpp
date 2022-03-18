@@ -26,5 +26,12 @@ else
 endif
 |Client|
 :Return response;
+if(successful) then
+->Yes;
+:Downloaded file;
+else
+->No;
+:Show error;
+endif
 stop
 @enduml
