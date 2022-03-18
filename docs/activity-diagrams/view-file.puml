@@ -28,7 +28,7 @@ endif
 :Return response;
 if(successful) then
 ->Yes;
-:Downloaded file;
+:Render file;
 else
 ->No;
 :Show error;
