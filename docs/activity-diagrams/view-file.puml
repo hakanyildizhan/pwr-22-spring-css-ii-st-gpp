@@ -25,5 +25,6 @@ else
 endif
 |Client|
 :Return response;
+:Render file;
 stop
 @enduml
