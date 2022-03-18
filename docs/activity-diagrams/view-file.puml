@@ -2,11 +2,12 @@
 |Client|
 start
 |Client|
+:Login successfully;
 :Send request to fetch drive items;
 |Server|
 :Sends response with drive items;
 |Client|
-:Click specific item;
+:Select the file;
 :Send request to fetch actual specific file;
 |Server|
 :Validate;
