@@ -12,7 +12,7 @@ start
 :Validate;
 if (file exists) then
  ->Yes;
- if (does the user has access) then
+ if (does the user has view access) then
   ->Yes;
   :Return OK response;
  else
