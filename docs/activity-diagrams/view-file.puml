@@ -1,0 +1,7 @@
+@startuml
+start
+:Login successfully;
+:Click view item button;
+:See your file on the webpage;
+stop
+@enduml
