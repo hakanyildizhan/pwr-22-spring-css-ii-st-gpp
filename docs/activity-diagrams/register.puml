@@ -1,0 +1,84 @@
+@startuml Register
+|Client|
+start
+|Client|
+:Navigate to app page;
+if (Already logged in?) then
+    ->Yes;
+    :Open app;
+    stop
+else
+    ->No;
+    :Direct user to login/register page;
+    if (Already a user?) then
+    ->Yes;
+    :User navigates to Login page;
+    stop
+    else
+        ->No;
+        :User navigates to Register page;
+        repeat
+            repeat
+                repeat
+                    :Enter email;
+                repeat while (Valid e-mail format?) is (No)
+                ->Yes;
+                :Send e-mail to server;
+                |Server|
+                :Check availability;
+                :Send back response;
+                |Client|
+            repeat while (Available?) is (No)
+            ->Yes;
+            repeat
+                repeat
+                    :Enter the password;
+                repeat while (Meets requirements?) is (No)
+                ->Yes;
+                :User clicks Register button;
+                :Send e-mail and password to server;
+                |Server|
+                :Check e-mail and password;
+                if (E-mail available?) then
+                    ->Yes;
+                    if (Password meets requirements?) then
+                        ->Yes;
+                        :Add user to DB;
+                        :Set user state to inactive;
+                        :Generate e-mail confirmation link;
+                        :Send confirmation e-mail to user;
+                        :Send response to client;
+                        |Client|
+                        :Prompt user to check confirmation email;
+                        :User clicks the confirmation link;
+                        |Server|
+                        if (Link valid?) then
+                            ->No;
+                            :Error page is shown;
+                            stop
+                        else
+                            ->Yes;
+                            :User is activated;
+                            :User is logged in;
+                            :Send OK response with valid JWT token;
+                            |Client|
+                            :Client logs in automatically;
+                        endif
+                        stop
+                    else
+                        ->No;
+                    endif
+                else
+                    ->No;
+                endif
+                |Server|
+                :Send back response;
+                |Client|
+                :Get response;
+            repeat while (Password invalid?) is (Yes)
+        repeat while (Email unavailable?) is (Yes)
+        ->Form data is already processed on server;
+        end
+    endif
+endif
+@enduml
