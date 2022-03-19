@@ -1,4 +1,4 @@
-@startuml
+@startuml View File
 |Client|
 start
 |Client|
@@ -26,12 +26,20 @@ else
 endif
 |Client|
 :Return response;
-if(successful) then
-->Yes;
-:Render file;
+if(Successful) then
+ ->Yes;
+ if(File is a picture or text) then
+  ->Yes;
+  :Render file;
+  stop
+ else
+  ->No;
+  :Show file details;
+  stop
+ endif
 else
-->No;
-:Show error;
+ ->No;
+ :Show error;
+ stop
 endif
-stop
 @enduml

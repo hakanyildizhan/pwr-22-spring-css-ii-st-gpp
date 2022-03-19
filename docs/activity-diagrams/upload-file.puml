@@ -1,15 +1,26 @@
-@startuml
+@startuml Upload File
 start
 :Login successfully;
 :Click upload item button;
-:Chose the file from your PC;
-if (File uploaded successfully) then
+:Choose the file from your PC;
+if (Free space exceeded) then
  ->Yes;
- :Click the button for upload confirmation;
- :See your file on the webpage;
+ :Prompt user to free up space;
+ stop
 else
  ->No;
- :Close the modal for file selection;
+ :Prompt if file with same name exists;
+ :                       Upload file 
+ (replace any existing file or add as new);
+ if (File uploaded successfully) then
+  ->Yes;
+  :Click the button for upload confirmation;
+  :See your file on the webpage;
+ else
+  ->No;
+  :Show error;
+  stop
+ endif
 endif
 stop
 @enduml
