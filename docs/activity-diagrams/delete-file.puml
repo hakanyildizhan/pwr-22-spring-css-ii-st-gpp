@@ -1,0 +1,39 @@
+@startuml
+|Client|
+start
+|Client|
+:Login successfully;
+:Send request to fetch drive items;
+|Server|
+:Sends response with drive items;
+|Client|
+:Click delete icon on specific item;
+->Modal opens;
+if (continue to delete (Y) or no (N)) then
+ -> Yes;
+ :Send request to delete file;
+|Server|
+:Validate;
+if (file exists) then
+ ->Yes;
+ if (does the user has delete access) then
+  ->Yes;
+  :Return OK response;
+  :Delete file/mark the file as a trash;
+ else
+  ->No;
+  :Return error;
+ endif
+else
+ -> No;
+ :Return error;
+endif
+|Client|
+:Return response;
+else
+ -> No;
+ :Return error;
+endif
+:Close the modal;
+stop
+@enduml

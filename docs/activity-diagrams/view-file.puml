@@ -1,0 +1,37 @@
+@startuml
+|Client|
+start
+|Client|
+:Login successfully;
+:Send request to fetch drive items;
+|Server|
+:Sends response with drive items;
+|Client|
+:Select the file;
+:Send request to fetch actual specific file;
+|Server|
+:Validate;
+if (file exists) then
+ ->Yes;
+ if (does the user has view access) then
+  ->Yes;
+  :Return OK response;
+ else
+  ->No;
+  :Return error;
+ endif
+else
+ -> No;
+ :Return error;
+endif
+|Client|
+:Return response;
+if(successful) then
+->Yes;
+:Render file;
+else
+->No;
+:Show error;
+endif
+stop
+@enduml
