@@ -25,6 +25,15 @@ Our group project work for the 2022 spring semester.
 
 ## Tech stack
 
-*  Vue.js (Front-end)
-*  Node.js (Hosting, Request handling)  
-*  Java (REST API, data access)
+* Vue.js (Front-end)
+* Node.js (Hosting, Request handling)  
+* Java (REST API, data access)
+
+#Target platform
+- Web browsers (compatibility with Chrome, Safari, Opera, Firefox and Edge)
+
+# Scalability requirements
+- Given that the project requires free disk space in order to provide it to users, we assume that each 
+user will need about 100MB of free space. As the free/test/student version of resources allow storing up to 20 GB of data
+for free, we assume that the project might scale up to 200 users.
+- Taking into account the above estimate, our endpoints should handle the load around 200 requests per minute
