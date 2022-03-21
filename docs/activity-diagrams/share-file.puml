@@ -1,4 +1,5 @@
 @startuml
+|Client|
 start
 :Login successfully;
 :Open the subpage with your files;
@@ -7,9 +8,17 @@ start
 if (Sharing by email (Y) or by link (N)) then
  -> Yes;
  :Enter the email of a user you want to share the file with;
+ :Click confirm button;
+ |Server|
+ :Save privileges for users with entered email;
 else
  -> No;
+ |Client|
  :Click the button for link generation;
+ |Server|
+ :Generate the link;
+ :Set privileges according to the picked option;
+ |Client|
  :Copy generated link;
 endif
 :Close the modal;
