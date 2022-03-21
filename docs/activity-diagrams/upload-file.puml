@@ -1,20 +1,29 @@
 @startuml Upload File
+|Client|
 start
 :Login successfully;
 :Click upload item button;
 :Choose the file from your PC;
+|Server|
+:Check if free space is exceeded;
+|Client|
 if (Free space exceeded) then
  ->Yes;
  :Prompt user to free up space;
  stop
 else
  ->No;
+ |Server|
+ :Check whether file with given name exists;
+ |Client|
  :Prompt if file with same name exists;
  :                       Upload file 
  (replace any existing file or add as new);
+ |Server|
+ :Save file in database;
+ |Client|
  if (File uploaded successfully) then
   ->Yes;
-  :Click the button for upload confirmation;
   :See your file on the webpage;
  else
   ->No;
