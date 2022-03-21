@@ -29,7 +29,7 @@ Our group project work for the 2022 spring semester.
 * Node.js (Hosting, Request handling)  
 * Java (REST API, data access)
 
-#Target platform
+# Target platform
 - Web browsers (compatibility with Chrome, Safari, Opera, Firefox and Edge)
 
 # Scalability requirements
