@@ -1,18 +1,88 @@
-@startuml
+@startuml Architecture Diagram
+cloud "AWS" {
 
-package "Frontend" {
-    [Web application]
+    database "DynamoDB" {
+        [Authentication Document]
+        [File Metadata Document]
+    }
+
+    cloud "S3" {
+        [File Storage]
+    }
+
+    package "Backend" {
+    
+        package "Backend Service" {
+            [Login Service]
+            [Registration Service]
+            [Reset Password Service]
+            [File Sharing Service]
+            [File Viewing Service]
+            [File Upload Service]
+            [File Download Service]
+            [File Delete Service]
+
+            Login - [Login Service]
+            CreateAccount - [Registration Service]
+            UpdatePassword - [Reset Password Service]
+            GenerateResetPasswordLink - [Reset Password Service]
+            GrantAccess - [File Sharing Service]
+            RevokeAccess - [File Sharing Service]
+            UploadFile - [File Upload Service]
+            DownloadFile - [File Download Service]
+            DeleteFile - [File Delete Service]
+            RenderFile - [File Viewing Service]
+
+            [File Sharing Service] --> [File Storage]
+            [File Sharing Service] --> [File Storage]
+            [File Upload Service] --> [File Storage]
+            [File Download Service] --> [File Storage]
+            [File Delete Service] --> [File Storage]
+            [File Viewing Service] --> [File Storage]
+
+            [File Sharing Service] --> [File Metadata Document]
+            [File Sharing Service] --> [File Metadata Document]
+            [File Upload Service] --> [File Metadata Document]
+            [File Download Service] --> [File Metadata Document]
+            [File Delete Service] --> [File Metadata Document]
+            [File Viewing Service] --> [File Metadata Document]
+
+            [Login Service] --> [Authentication Document]
+            [Registration Service] --> [Authentication Document]
+            [Reset Password Service] --> [Authentication Document]
+
+        }
+
+        package "Entry Point" {
+            [Authentication]
+            [File Handling]
+
+            [Authentication] --> Login
+            [Authentication] --> CreateAccount
+            [Authentication] --> UpdatePassword
+            [Authentication] --> GenerateResetPasswordLink
+            [File Handling] --> GrantAccess 
+            [File Handling] --> RevokeAccess 
+            [File Handling] --> UploadFile 
+            [File Handling] --> DownloadFile 
+            [File Handling] --> DeleteFile 
+            [File Handling] --> RenderFile 
+        }
+    }
+
+    package "Frontend" {
+        [LoginView]
+        HTTP1 - LoginView
+
+        [RegisterView]
+        HTTP2 - RegisterView
+
+        [FileView]
+        HTTP3 - FileView
+    }
+
+    HTTP1 --> [Authentication]
+    HTTP2 --> [Authentication]
+    HTTP3 --> [File Handling]
 }
-
-package "Backend" {
-    HTTP - [Web server]
-    [Web application] --> HTTP
-}
-
-database "DB" {
-    frame "Database"
-}
-
-[Web server] --> [Database]
-
 @enduml
