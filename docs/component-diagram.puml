@@ -1,9 +1,8 @@
 @startuml Architecture Diagram
 cloud "AWS" {
 
-    database "DynamoDB" {
-        [Authentication Document]
-        [File Metadata Document]
+    database "DB" {
+        [DynamoDB]
     }
 
     cloud "S3" {
@@ -11,78 +10,135 @@ cloud "AWS" {
     }
 
     package "Backend" {
-    
-        package "Backend Service" {
-            [Login Service]
-            [Registration Service]
-            [Reset Password Service]
-            [File Sharing Service]
-            [File Viewing Service]
-            [File Upload Service]
-            [File Download Service]
-            [File Delete Service]
 
-            Login - [Login Service]
-            CreateAccount - [Registration Service]
-            UpdatePassword - [Reset Password Service]
-            GenerateResetPasswordLink - [Reset Password Service]
-            GrantAccess - [File Sharing Service]
-            RevokeAccess - [File Sharing Service]
-            UploadFile - [File Upload Service]
-            DownloadFile - [File Download Service]
-            DeleteFile - [File Delete Service]
-            RenderFile - [File Viewing Service]
+            package "FileManagementServices" {
 
-            [File Sharing Service] --> [File Storage]
-            [File Sharing Service] --> [File Storage]
-            [File Upload Service] --> [File Storage]
+
+            package "FileDownloadService" {
+               [File Download Service]
+               DownloadFile - [File Download Service]
+            }
+
+            package "FileUploadService" {
+               [File Upload Service]
+               UploadFile - [File Upload Service]
+            }
+
+            package "FileDeleteService" {
+               [File Delete Service]
+               DeleteFile - [File Delete Service]
+            }
+
+            package "GrantAccessService" {
+               [Grant Access Service]
+
+               GrantAccess - [Grant Access Service]
+            }
+
+            package "RevokeAccessService" {
+               [Revoke Access Service]
+
+               RevokeAccess - [Revoke Access Service]
+            }
+
+            package "ViewFileService" {
+               [View File Service]
+
+               ViewFile - [View File Service]
+            }
+
+
+            }
+
+            package "AccountManagementServices" {
+            package "AuthenticationServices" {
+               [Login Service]
+               Login - [Login Service]
+            }
+
+            package "UpdatePasswordService" {
+               [Update Password Service]
+               UpdatePassword - [Update Password Service]
+            }
+
+            package "ResetPasswordService" {
+               [Reset Password Service]
+               GenerateLink - [Reset Password Service]
+            }
+
+            package "RegistrationService" {
+               [Registration Service]
+               CreateAccount - [Registration Service]
+            }
+
+
+
+            [Grant Access Service] --> [DynamoDB]
+            [Revoke Access Service] --> [DynamoDB]
+            [View File Service] --> [File Storage]
+
             [File Download Service] --> [File Storage]
             [File Delete Service] --> [File Storage]
-            [File Viewing Service] --> [File Storage]
+            [File Upload Service] --> [File Storage]
 
-            [File Sharing Service] --> [File Metadata Document]
-            [File Sharing Service] --> [File Metadata Document]
-            [File Upload Service] --> [File Metadata Document]
-            [File Download Service] --> [File Metadata Document]
-            [File Delete Service] --> [File Metadata Document]
-            [File Viewing Service] --> [File Metadata Document]
 
-            [Login Service] --> [Authentication Document]
-            [Registration Service] --> [Authentication Document]
-            [Reset Password Service] --> [Authentication Document]
-
+            [Login Service] --> [DynamoDB]
+            [Registration Service] --> [DynamoDB]
+            [Update Password Service] --> [DynamoDB]
+            [Reset Password Service] --> [DynamoDB]
         }
 
         package "Entry Point" {
-            [Authentication]
+
+            package "Authentication" {
+            [AuthenticationController]
+
+
+            [AuthenticationController] --> Login
+
+            HTTP3 - [AuthenticationController]
+        }
+
+package "AccountManagement" {
+            [AccountManagementController]
+
+
+            [AccountManagementController] --> CreateAccount
+            [AccountManagementController] --> UpdatePassword
+            [AccountManagementController] --> GenerateLink
+
+
+
+            HTTP2 - [AccountManagementController]
+
+        }
+
+package "FileHandling" {
+
             [File Handling]
 
-            [Authentication] --> Login
-            [Authentication] --> CreateAccount
-            [Authentication] --> UpdatePassword
-            [Authentication] --> GenerateResetPasswordLink
-            [File Handling] --> GrantAccess 
-            [File Handling] --> RevokeAccess 
-            [File Handling] --> UploadFile 
-            [File Handling] --> DownloadFile 
-            [File Handling] --> DeleteFile 
-            [File Handling] --> RenderFile 
+            [File Handling] --> GrantAccess
+            [File Handling] --> RevokeAccess
+            [File Handling] --> UploadFile
+            [File Handling] --> DownloadFile
+            [File Handling] --> DeleteFile
+            [File Handling] --> ViewFile
+
+            HTTP1 - [File Handling]
         }
+}
+
     }
 
     package "Frontend" {
-        [LoginView]
-        HTTP1 - LoginView
-
         [RegisterView]
-        HTTP2 - RegisterView
+        [LoginView]
 
         [FileView]
-        HTTP3 - FileView
     }
 
-    HTTP1 --> [Authentication]
-    HTTP2 --> [Authentication]
-    HTTP3 --> [File Handling]
+    FileView --> HTTP1
+    RegisterView --> HTTP2
+    LoginView --> HTTP3
 }
 @enduml
