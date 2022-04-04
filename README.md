@@ -11,11 +11,25 @@ Our group project work for the 2022 spring semester.
 
 ## Project schedule
 
-* **March 21** (4th class): User stories, components diagram -> security aspects. sec. libraries. 
-* **April 4** (6th class): Architecture, schedule for alpha/beta/final
-* **April 18** (8th class): Alpha version
-* **May 9** (11th class): Beta version
-* **May 30** (14th class): Final version
+* ~~**March 21** (4th class): User stories, components diagram -> security aspects. sec. libraries.~~
+* ~~**April 4** (6th class): Architecture, component diagram, schedule for alpha/beta/final~~
+
+* **April 18** (8th class): Alpha version: User can login, register, upload a file.
+    * Minimal UI, 
+    * Focus on login and register. 
+    * Set up the AWS S3 and DynamoDB (can be mocked) 
+    * Basic file upload functionality. 
+    * Users have a max. space limit.
+
+* **May 9** (11th class): Beta version: User can also delete and share a file, reset a password.
+    * UI improvements
+    * Delete and share functionalities 
+    * Focus on role based authentication
+
+* **May 30** (14th class): Final version: Fully functional product.
+    * Complete UI
+    * HTTPS support with SSL
+    * Set up hosting on AWS EC2
 
 ## Feature list
 
