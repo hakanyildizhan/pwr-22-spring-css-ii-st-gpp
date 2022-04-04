@@ -1,0 +1,171 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+\usepackage{minted}
+
+\title{GP ASN1}
+\author{Google Drive Clone Team}
+\date{April 2022}
+
+\begin{document}
+
+\maketitle
+
+\begin{minted}{text}
+    Login-Schema DEFINITIONS AUTOMATIC TAGS ::= 
+    BEGIN
+        LoginRequest ::= SEQUENCE
+        {
+            login           OCTET STRING,
+            password        OCTET STRING
+        }
+        
+        LoginResponse ::= SEQUENCE
+        {
+            status          INTEGER,
+            message         OCTET STRING
+        }
+    END
+    
+    Registration-Schema DEFINITIONS AUTOMATIC TAGS ::= 
+    BEGIN
+        CreateAccountRequest ::= SEQUENCE
+        {
+            email           OCTET STRING,
+            password        OCTET STRING,
+            repassword      OCTET STRING
+        }
+        
+        CreateAccountResponse ::= SEQUENCE
+        {
+            status          INTEGER,
+            message         OCTET STRING
+        }
+        
+        ActivateAccountRequest ::= SEQUENCE
+        {
+            token           OCTET STRING
+        }
+        
+        ActivateAccountResponse ::= SEQUENCE
+        {
+            status          INTEGER,
+            message         OCTET STRING
+        }
+    END
+    
+    Reset-Password-Schema DEFINITIONS AUTOMATIC TAGS ::= 
+    BEGIN
+        ResetPasswordRequest ::= SEQUENCE
+        {
+            email           OCTET STRING
+        }
+        
+        ResetPasswordResponse ::= SEQUENCE
+        {
+            status          INTEGER,
+            message         OCTET STRING
+        }
+    
+        ChangePasswordRequest ::= SEQUENCE
+        {
+            token           OCTET STRING,
+            password        OCTET STRING,
+            repassword      OCTET STRING
+        }
+        
+        ChangePasswordResponse ::= SEQUENCE
+        {
+            status          INTEGER,
+            message         OCTET STRING
+        }
+    END
+    
+    File-Sharing-Schema DEFINITIONS AUTOMATIC TAGS ::= 
+    BEGIN
+        GrantAccessRequest ::= SEQUENCE
+        {
+            email           OCTET STRING,
+            filePath        OCTET STRING
+        }
+        
+        GrantAccessResponse ::= SEQUENCE
+        {
+            status          INTEGER,
+            message         OCTET STRING
+        }
+        
+        RevokeAccessRequest ::= SEQUENCE
+        {
+            type            INTEGER { email(0), guess(1) },
+            email           OCTET STRING OPTIONAL,
+            filePath        OCTET STRING
+        }
+        
+        RevokeAccessResponse ::= SEQUENCE
+        {
+            status          INTEGER,
+            message         OCTET STRING
+        }
+    END
+    
+    Upload-File-Schema DEFINITIONS AUTOMATIC TAGS ::= 
+    BEGIN
+        FileUploadRequest ::= SEQUENCE
+        {
+            fileData        OCTET STRING
+        }
+        
+        FileUploadResponse ::= SEQUENCE
+        {
+            status          INTEGER,
+            message         OCTET STRING
+        }
+    END
+    
+    Download-File-Schema DEFINITIONS AUTOMATIC TAGS ::= 
+    BEGIN
+        FileDownloadRequest ::= SEQUENCE
+        {
+            filePath        OCTET STRING
+        }
+        
+        FileDownloadResponse ::= SEQUENCE
+        {
+            status          INTEGER,
+            message         OCTET STRING,
+            fileData        OCTET STRING
+        }
+    END
+    
+    Delete-File-Schema DEFINITIONS AUTOMATIC TAGS ::= 
+    BEGIN
+        FileDeleteRequest ::= SEQUENCE
+        {
+            filePath        OCTET STRING
+        }
+        
+        FileDownloadResponse ::= SEQUENCE
+        {
+            status          INTEGER,
+            message         OCTET STRING
+        }
+    END
+    
+    Render-File-Schema DEFINITIONS AUTOMATIC TAGS ::= 
+    BEGIN
+        FileRenderRequest ::= SEQUENCE
+        {
+            filePath        OCTET STRING
+        }
+        
+        FileRenderResponse ::= SEQUENCE
+        {
+            status          INTEGER,
+            message         OCTET STRING,
+            thumbnail       OCTET STRING
+        }
+    END
+\end{minted}
+
+\end{document}
