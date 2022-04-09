@@ -1,0 +1,17 @@
+spring:
+  profiles:
+    active: local
+drive:
+  secret: default-secret
+amazon:
+  dynamodb:
+    endpoint: http://localhost:8000/
+  aws:
+    accesskey: key
+    secretkey: key2
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
