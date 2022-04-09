@@ -21,10 +21,17 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'com.auth0:java-jwt:3.19.1'
+	implementation 'javax.validation:validation-api:2.0.1.Final'
+	implementation group: 'org.springframework.data', name: 'spring-data-releasetrain', version: 'Neumann-SR9', ext: 'pom'
+	implementation 'com.amazonaws:aws-java-sdk-dynamodb:1.12.195'
+	implementation 'com.github.derjust:spring-data-dynamodb:5.1.0'
+
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+
 }
 
 tasks.named('test') {
