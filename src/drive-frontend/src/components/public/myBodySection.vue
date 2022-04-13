@@ -1,6 +1,6 @@
 <template>
     <v-main>
-        <v-card color="secondary" style="height: 80vh" rounded="0">
+        <v-card style="height: 80vh; background-color: #424242" rounded="0">
             <v-row>
                 <v-col cols="6">Image goes here</v-col>
                 <v-col cols="6" class="py-10 my-auto">
@@ -9,36 +9,34 @@
                         <v-card-text>
                             <v-card class="px-16" elevation="0">
                                 <v-form class="px-16">
-                                    <v-card-text>
-                                        <v-text-field
-                                            label="Email"
-                                            v-model="registrationForm.email"
-                                            :rules="registrationValidate.emailRules"
-                                        />
-                                        {{registrationForm.email}}
-                                        <v-text-field
-                                            label="Password"
-                                            type="password"
-                                            @click="showPasswordValidations=true"
-                                            v-model="registrationForm.password"
-                                            :rules="registrationValidate.passwordRules"
-                                        />
-                                        {{registrationForm.password}}
-                                       <!--<template v-if="showPasswordValidations">
-                                            <p
-                                                :class="passwordLengthvalid? 'green--text' : 'red--text'"
-                                            >
-                                            Password length must be greater than 6
-                                            </p>
-                                            <p>Password must contain uppercase</p>
-                                            <p>Password must contain lowercase</p>
-                                            <p>Password must contain symbol</p>
-                                            <p>Password must contain number</p> 
-                                        </template>-->
-                                    </v-card-text>
+                                    <v-text-field
+                                        label="Email"
+                                        v-model="registrationForm.email"
+                                        :rules="registrationValidate.emailRules"
+                                    />
+                                    {{registrationForm.email}}
+                                    <v-text-field
+                                        label="Password"
+                                        type="password"
+                                        @click="showPasswordValidations=true"
+                                        v-model="registrationForm.password"
+                                        :rules="registrationValidate.passwordRules"
+                                    />
+                                    {{registrationForm.password}}
+                                    <!--<template v-if="showPasswordValidations">
+                                        <p
+                                            :class="passwordLengthvalid? 'green--text' : 'red--text'"
+                                        >
+                                        Password length must be greater than 6
+                                        </p>
+                                        <p>Password must contain uppercase</p>
+                                        <p>Password must contain lowercase</p>
+                                        <p>Password must contain symbol</p>
+                                        <p>Password must contain number</p> 
+                                    </template>-->
                                     <v-card-title class="justify-center">
                                         <v-btn 
-                                        class="success" 
+                                        color="success"
                                         elevation="4" 
                                         @click="loader = 'loading'"
                                         >Register</v-btn>
@@ -67,7 +65,7 @@
 
 <script>
     export default {
-        name: "my-body-section",
+        name: "myBodySection",
         data:()=>({
             passwordLengthvalid: false,
             showPasswordValidations: false,

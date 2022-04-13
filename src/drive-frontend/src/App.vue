@@ -1,13 +1,13 @@
 <template>
   <v-app id='App'>
-      <my-appbar/>
-      <my-body-section/>
+    <myAppbar />
+    <myBodySection />
   </v-app>
 </template>
 
 <script>
 import myAppbar from './components/public/myAppbar';
-import myBodySection from './components/public/myBodySection.vue';
+import myBodySection from './components/public/myBodySection';
 
 export default {
   name: 'App',
