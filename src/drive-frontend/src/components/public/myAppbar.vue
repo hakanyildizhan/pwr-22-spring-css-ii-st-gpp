@@ -1,5 +1,5 @@
 <template>
-    <v-app-bar app elevation='0'>
+    <v-app-bar app>
         <v-app-bar-title>Drive</v-app-bar-title>
         <v-spacer />
         <span class='text-body-1'> sample </span>

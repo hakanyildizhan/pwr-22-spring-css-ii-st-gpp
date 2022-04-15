@@ -1,19 +1,27 @@
 <template>
   <v-app id='App'>
-    <myAppbar />
+  
+    <!-- <myAppbar />
+    <sideNavigation />
+    <fileItemList /> -->
     <myBodySection />
+    
   </v-app>
 </template>
 
 <script>
-import myAppbar from './components/public/myAppbar';
+// import myAppbar from './components/public/myAppbar';
+// import fileItemList from './components/public/fileItemList';
+// import sideNavigation from './components/public/sideNavigation'
 import myBodySection from './components/public/myBodySection';
 
 export default {
   name: 'App',
 
   components: {
-    myAppbar,
+    // myAppbar,
+    // fileItemList,
+    // sideNavigation,
     myBodySection
   },
 

@@ -1,6 +1,6 @@
 <template>
     <v-main>
-        <v-card style="height: 80vh; background-color: #424242" rounded="0">
+        <v-container fluid style="height: 80vh; background-color: #424242" rounded="0">
             <v-row>
                 <v-col cols="6">Image goes here</v-col>
                 <v-col cols="6" class="py-10 my-auto">
@@ -47,7 +47,10 @@
                     </v-card>
                 </v-col>
             </v-row>
-        </v-card>
+        </v-container>
+    </v-main>
+
+    <v-footer app>
         <v-card elevation="0">
             <v-card-title class="justify-center">About us</v-card-title>
             <v-card-text>
@@ -60,7 +63,7 @@
                 facere.
             </v-card-text>
         </v-card>
-    </v-main>
+    </v-footer>
 </template>
 
 <script>
