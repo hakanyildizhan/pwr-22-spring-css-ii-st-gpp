@@ -1,8 +1,8 @@
 <template>
   <v-app id='App'>
   
-    <!-- <myAppbar />
-    <sideNavigation />
+    <myAppbar />
+    <!--<sideNavigation />
     <fileItemList /> -->
     <myBodySection />
     
@@ -10,7 +10,7 @@
 </template>
 
 <script>
-// import myAppbar from './components/public/myAppbar';
+import myAppbar from './components/public/myAppbar';
 // import fileItemList from './components/public/fileItemList';
 // import sideNavigation from './components/public/sideNavigation'
 import myBodySection from './components/public/myBodySection';
@@ -19,10 +19,10 @@ export default {
   name: 'App',
 
   components: {
-    // myAppbar,
+    myAppbar,
     // fileItemList,
     // sideNavigation,
-    myBodySection
+    myBodySection,
   },
 
   data: () => ({
