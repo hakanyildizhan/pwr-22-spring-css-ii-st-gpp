@@ -1,28 +1,28 @@
 <template>
   <v-app id='App'>
   
-    <!-- <myAppbar />
+    <myAppbar />
     <sideNavigation />
-    <fileItemList /> -->
-    <myBodySection />
+    <fileItemList />
+    <!-- <myBodySection /> -->
     
   </v-app>
 </template>
 
 <script>
-// import myAppbar from './components/public/myAppbar';
-// import fileItemList from './components/public/fileItemList';
-// import sideNavigation from './components/public/sideNavigation'
-import myBodySection from './components/public/myBodySection';
+import myAppbar from './components/public/myAppbar';
+import fileItemList from './components/public/fileItemList';
+import sideNavigation from './components/public/sideNavigation'
+// import myBodySection from './components/public/myBodySection';
 
 export default {
   name: 'App',
 
   components: {
-    // myAppbar,
-    // fileItemList,
-    // sideNavigation,
-    myBodySection
+    myAppbar,
+    fileItemList,
+    sideNavigation,
+    // myBodySection
   },
 
   data: () => ({
