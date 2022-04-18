@@ -5,7 +5,7 @@
                 <v-col cols="6"></v-col>
                 <v-col cols="6" class="py-10 my-auto">
                     <v-card class="justify-center py-15" elevation="3" rounded="0">
-                        <v-card-title class="justify-center"><span class="text-green-darken-3">Register</span></v-card-title>
+                        <v-card-title class="justify-center"><span class="text-green-darken-3">Login</span></v-card-title>
                         <v-card-text>
                             <v-card-title class="justify-center">
                                 <template v-if="showErrorSnack">
@@ -16,33 +16,41 @@
                                 <v-form class="px-16">
                                     <v-text-field
                                         label="Email"
-                                        v-model="registrationForm.email"
-                                        :rules="registrationValidate.emailRules"
+                                        v-model="loginForm.email"
+                                        :rules="loginValidate.emailRules"
                                     />
                                     <v-text-field
                                         label="Password"
                                         type="password"
                                         @click="showPasswordValidations=true"
-                                        v-model="registrationForm.password"
-                                        :rules="registrationValidate.passwordRules"
+                                        v-model="loginForm.password"
+                                        :rules="loginValidate.passwordRules"
                                     />
+                                    
+                                    <!--<template v-if="showPasswordValidations">
+                                        <p
+                                            :class="passwordLengthvalid? 'green--text' : 'red--text'"
+                                        >
+                                        Password length must be greater than 6
+                                        </p>
+                                        <p>Password must contain uppercase</p>
+                                        <p>Password must contain lowercase</p>
+                                        <p>Password must contain symbol</p>
+                                        <p>Password must contain number</p> 
+                                    </template>-->
                                     <v-card-title class="justify-center">
                                        <v-btn
                                             class="success"
                                             :loading="loading"
                                             :disabled="loading"
-                                            @click="submitRegistration"
+                                            @click="submitLogin"
                                             large
                                         >
-                                            Register
+                                            Login
                                         </v-btn>
                                     </v-card-title>
                                 </v-form>
                             </v-card>
-                            <v-card-title class="justify-center">
-                                <span class="text-subtitle-2"> You already have an account?</span> 
-                                <v-btn variant="plain">Login</v-btn>
-                            </v-card-title>
                         </v-card-text>
                     </v-card>
                 </v-col>
@@ -65,17 +73,17 @@
 
 <script>
     export default {
-        name: "myBodySection",
+        name: "loginForm",
         data:()=>({
             showErrorSnack: false,
             loading: false,
             passwordLengthvalid: false,
             showPasswordValidations: false,
-            registrationForm:{
+            loginForm:{
                 email:"",
                 password:"",
             },
-            registrationValidate:{
+            loginValidate:{
                 passwordRules: [
                     v => !!v || "Password is required",
                     v => (v && v.length >= 8) || "Password length must be greater than 8",
@@ -95,21 +103,21 @@
             },
         }),
         method: {
-            submitRegistration(){
+            submitLogin(){
                 this.loading=true;
                 this.showErrorSnack=true;
                 // redirect
-                //this.$router.push("/item");
-                this.$router.push('/dashboard')
+                //this.$router.push("/email");
+                this.$router.push('/dashboard');
             },
         },
         watch: {
             loading() {
                 setTimeout(() => (this.loading = false), 3000);
             },
-            "registartionForm.password": function () {
+            "loginForm.password": function () {
                 console.log("called here");
-                if (this.registrationForm.password.length > 6) {
+                if (this.loginForm.password.length > 6) {
                     this.passwordLengthvalid = true;
                 } else {
                     this.passwordLengthvalid = false;
