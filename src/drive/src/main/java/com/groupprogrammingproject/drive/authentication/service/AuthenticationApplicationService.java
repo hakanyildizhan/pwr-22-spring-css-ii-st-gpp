@@ -44,7 +44,7 @@ public class AuthenticationApplicationService {
     }
 
     private void throwExceptionForBlockedUser(AuthorizationData authorizationData) {
-        if (!(AccountStatus.valueOf(authorizationData.getStatus()) == BLOCKED)) {
+        if (AccountStatus.valueOf(authorizationData.getStatus()) == BLOCKED) {
             throw new BlockedAccountException();
         }
     }

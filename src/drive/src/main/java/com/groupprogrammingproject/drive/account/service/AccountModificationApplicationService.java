@@ -37,7 +37,7 @@ public class AccountModificationApplicationService {
                 userId.toString(),
                 accountCreationData.getEmail(),
                 passwordEncoder.encode(accountCreationData.getPassword()),
-                ACTIVE.name(),
-                "ROLE_USER");
+                "ROLE_USER",
+                ACTIVE.name());
     }
 }
