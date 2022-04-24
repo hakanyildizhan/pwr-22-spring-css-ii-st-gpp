@@ -3,7 +3,9 @@ package com.groupprogrammingproject.drive.account.controller;
 import com.groupprogrammingproject.drive.account.dto.AccountCreationRequest;
 import com.groupprogrammingproject.drive.account.dto.AccountCreationResponse;
 import com.groupprogrammingproject.drive.account.service.AccountModificationApplicationService;
+import com.groupprogrammingproject.drive.exception.AccountWithGivenEmailAlreadyExists;
 import com.groupprogrammingproject.drive.exception.ErrorBody;
+import com.groupprogrammingproject.drive.exception.ExceptionCode;
 import com.groupprogrammingproject.drive.exception.UserDoesNotExistException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -13,8 +15,7 @@ import javax.validation.Valid;
 
 import static com.groupprogrammingproject.drive.exception.ExceptionCode.DATA_INTEGRITY;
 import static com.groupprogrammingproject.drive.exception.ExceptionCode.NONEXISTENT_ACCOUNT;
-import static com.groupprogrammingproject.drive.exception.ExceptionMessage.DATA_INTEGRITY_MESSAGE;
-import static com.groupprogrammingproject.drive.exception.ExceptionMessage.NONEXISTENT_ACCOUNT_MESSAGE;
+import static com.groupprogrammingproject.drive.exception.ExceptionMessage.*;
 import static org.springframework.http.HttpStatus.*;
 
 @RestController
@@ -49,6 +50,15 @@ public class AccountController {
         return ErrorBody.builder()
                 .message(NONEXISTENT_ACCOUNT_MESSAGE)
                 .code(NONEXISTENT_ACCOUNT)
+                .build();
+    }
+
+    @ResponseStatus(BAD_REQUEST)
+    @ExceptionHandler(AccountWithGivenEmailAlreadyExists.class)
+    public ErrorBody handleUserDoesNotExistException(AccountWithGivenEmailAlreadyExists exception) {
+        return ErrorBody.builder()
+                .message(ACCOUNT_ALREADY_EXISTS)
+                .code(ExceptionCode.ACCOUNT_ALREADY_EXISTS)
                 .build();
     }
 }
