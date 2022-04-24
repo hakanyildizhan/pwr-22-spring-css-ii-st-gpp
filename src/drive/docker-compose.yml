@@ -1,0 +1,10 @@
+version: "3"
+services:
+  dynamo:
+    image: amazon/dynamodb-local
+    ports:
+      - "8000:8000"
+  drive:
+    image: gpp/drive
+    ports:
+      - "8080:8080"

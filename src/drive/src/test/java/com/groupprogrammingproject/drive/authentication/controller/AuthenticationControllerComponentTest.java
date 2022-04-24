@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.groupprogrammingproject.drive.ContextTestBase;
 import com.groupprogrammingproject.drive.account.dto.AccountCreationRequest;
 import com.groupprogrammingproject.drive.authentication.dto.AuthenticationRequest;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static com.groupprogrammingproject.drive.exception.ExceptionCode.INCORRECT_PASSWORD;
@@ -18,6 +19,11 @@ public class AuthenticationControllerComponentTest extends ContextTestBase {
     private static final String EMAIL = "ttester@gmail.com";
 
     private static final String PASSWORD = "tester";
+
+    @BeforeEach
+    void setUp() {
+        authorizationDataRepository.deleteAll();
+    }
 
     @Test
     void shouldAuthenticateUser() throws Exception {
