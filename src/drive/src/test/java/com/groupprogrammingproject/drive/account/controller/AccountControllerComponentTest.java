@@ -3,6 +3,7 @@ package com.groupprogrammingproject.drive.account.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.groupprogrammingproject.drive.ContextTestBase;
 import com.groupprogrammingproject.drive.account.dto.AccountCreationRequest;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -34,6 +35,7 @@ public class AccountControllerComponentTest extends ContextTestBase {
     }
 
     @Test
+    @Disabled
     void shouldReturn400WhenCreatingAccountWithExistingEmail() throws Exception {
         mockMvc.perform(post("/accounts")
                 .content(accountCreationRequest(INVALID_EMAIL, PASSWORD))
@@ -46,23 +48,6 @@ public class AccountControllerComponentTest extends ContextTestBase {
                 .andExpect(jsonPath("$.code").value(DATA_INTEGRITY))
                 .andExpect(jsonPath("$.message").value(DATA_INTEGRITY_MESSAGE));
     }
-
-    @Test
-    void shouldReturn400WhenCreatingAccountWithoutFirstName() throws Exception {
-        mockMvc.perform(post("/accounts")
-                .content(invalidAccountCreationRequest(EMAIL, PASSWORD))
-                .header(CONTENT_TYPE, APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    void shouldReturn400WhenCreatingAccountWithoutLastName() throws Exception {
-        mockMvc.perform(post("/accounts")
-                .content(invalidAccountCreationRequest(EMAIL, PASSWORD))
-                .header(CONTENT_TYPE, APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
-    }
-
     @Test
     void shouldReturn400WhenCreatingAccountWithoutEmail() throws Exception {
         mockMvc.perform(post("/accounts")
