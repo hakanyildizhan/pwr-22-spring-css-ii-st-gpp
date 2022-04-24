@@ -3,14 +3,14 @@ package com.groupprogrammingproject.drive.account.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.groupprogrammingproject.drive.ContextTestBase;
 import com.groupprogrammingproject.drive.account.dto.AccountCreationRequest;
-import org.junit.jupiter.api.Disabled;
+import com.groupprogrammingproject.drive.exception.ExceptionCode;
+import com.groupprogrammingproject.drive.exception.ExceptionMessage;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
 
-import static com.groupprogrammingproject.drive.exception.ExceptionCode.DATA_INTEGRITY;
-import static com.groupprogrammingproject.drive.exception.ExceptionMessage.DATA_INTEGRITY_MESSAGE;
+import static com.groupprogrammingproject.drive.exception.ExceptionMessage.ACCOUNT_ALREADY_EXISTS;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -24,7 +24,7 @@ public class AccountControllerComponentTest extends ContextTestBase {
 
     private static final String INVALID_EMAIL = "invalid@email.com";
 
-    private static final String PASSWORD = "xxx";
+    private static final String PASSWORD = "XXXxxx###4444";
 
     @Test
     void shouldReturn201WhenCreatingAccount() throws Exception {
@@ -35,7 +35,6 @@ public class AccountControllerComponentTest extends ContextTestBase {
     }
 
     @Test
-    @Disabled
     void shouldReturn400WhenCreatingAccountWithExistingEmail() throws Exception {
         mockMvc.perform(post("/accounts")
                 .content(accountCreationRequest(INVALID_EMAIL, PASSWORD))
@@ -45,8 +44,8 @@ public class AccountControllerComponentTest extends ContextTestBase {
                 .content(accountCreationRequest(INVALID_EMAIL, PASSWORD))
                 .header(CONTENT_TYPE, APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.code").value(DATA_INTEGRITY))
-                .andExpect(jsonPath("$.message").value(DATA_INTEGRITY_MESSAGE));
+                .andExpect(jsonPath("$.code").value(ExceptionCode.ACCOUNT_ALREADY_EXISTS))
+                .andExpect(jsonPath("$.message").value(ACCOUNT_ALREADY_EXISTS));
     }
     @Test
     void shouldReturn400WhenCreatingAccountWithoutEmail() throws Exception {
