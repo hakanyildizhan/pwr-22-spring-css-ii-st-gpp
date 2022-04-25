@@ -4,14 +4,14 @@ import { createVuetify } from 'vuetify'
 import App from './App.vue'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
+import router from './router/router'
 
-//Vue.config.productionTip = false
-
-const app = createApp(App)
 const vuetify = createVuetify({
     components,
     directives
 })
 
-app.use(vuetify)
-app.mount('#app')
+createApp(App)
+.use(vuetify)
+.use(router)
+.mount('#app')

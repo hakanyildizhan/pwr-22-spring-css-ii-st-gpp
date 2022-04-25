@@ -1,7 +1,7 @@
 <template>
   <v-app id="app">
     <my-appbar />
-    <v-main> email confirmation pages </v-main>
+    <v-main> Please check your email at {{ $route.params.email }} to confirm your account.</v-main>
   </v-app>
 </template>
 

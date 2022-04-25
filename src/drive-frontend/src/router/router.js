@@ -1,18 +1,16 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import item from "../components/public/item"
+import { createRouter, createWebHistory  } from 'vue-router'
+import RegisterView from '@/views/Register'
+import DashboardView from "../views/Dashboard"
 import EmailRedirect from "../components/public/emailRedirect"
 import EmailConfrim from "../views/emailConfirm.vue"
+import LoginView from "@/views/Login.vue"
 import PageNotFound from "../views/404.vue"
-
-Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
     name: 'home',
-    component: HomeView
+    component: RegisterView
   },
   {
     path: '/email',
@@ -22,12 +20,22 @@ const routes = [
   {
     path: '/dashboard',
     name: 'dashboard',
-    component: item
+    component: DashboardView
   },
   {
-    path: '/emailConfirm',
+    path: '/emailConfirm/:email',
     name: 'emailConfirm',
     component: EmailConfrim
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: RegisterView
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: LoginView
   },
   {
     path: '/about',
@@ -38,16 +46,16 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
   },
   {
-    path: '*',
+    path: "/:catchAll(.*)",
     name: '404',
     component: PageNotFound
-  }
+  },
 ]
 
-const router = new VueRouter({
-  mode: 'history',
+const router = createRouter({
+  history: createWebHistory(),
   base: process.env.BASE_URL,
-  routes
+  routes: routes
 })
 
 export default router

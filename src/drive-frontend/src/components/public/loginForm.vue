@@ -13,11 +13,12 @@
                                 </template>
                             </v-card-title>
                             <v-card class="px-16" elevation="0">
-                                <v-form class="px-16">
+                                <v-form class="px-16" ref="form" v-model="valid" lazy-validation>
                                     <v-text-field
                                         label="Email"
                                         v-model="loginForm.email"
                                         :rules="loginValidate.emailRules"
+                                        @keydown="checkValidation"
                                     />
                                     <v-text-field
                                         label="Password"
@@ -25,6 +26,7 @@
                                         @click="showPasswordValidations=true"
                                         v-model="loginForm.password"
                                         :rules="loginValidate.passwordRules"
+                                        @keydown="checkValidation"
                                     />
                                     
                                     <!--<template v-if="showPasswordValidations">
@@ -42,7 +44,7 @@
                                        <v-btn
                                             class="success"
                                             :loading="loading"
-                                            :disabled="loading"
+                                            :disabled="(loading || !valid)"
                                             @click="submitLogin"
                                             large
                                         >
@@ -56,25 +58,14 @@
                 </v-col>
             </v-row>
         </v-card>
-        <v-card elevation="0">
-            <v-card-title class="justify-center">About us</v-card-title>
-            <v-card-text>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto
-                tempore sit magni tenetur vitae nisi laborum quaerat dolorem officia
-                debitis voluptas veniam porro facere, dolorum reiciendis exercitationem
-                qui, vero accusamus! Lorem ipsum dolor sit amet consectetur adipisicing
-                elit. Ut eaque aut provident? Culpa magni ut assumenda quam odit eius
-                dolores cum quas consequatur voluptate, natus ab velit minus rerum
-                facere.
-            </v-card-text>
-        </v-card>
     </v-main>
 </template>
 
 <script>
     export default {
-        name: "loginForm",
+        name: "LoginForm",
         data:()=>({
+            valid: true,
             showErrorSnack: false,
             loading: false,
             passwordLengthvalid: false,
@@ -102,18 +93,41 @@
                 ],
             },
         }),
-        method: {
+        methods: {
             submitLogin(){
                 this.loading=true;
                 this.showErrorSnack=true;
-                // redirect
-                //this.$router.push("/email");
-                this.$router.push('/dashboard');
+
+                if (this.$refs.form.validate()) {
+                    const requestOptions = {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(
+                            { 
+                                email: this.loginForm.email,
+                                password: this.loginForm.password 
+                            })
+                    };
+                    fetch("http://localhost:8080/login", requestOptions)
+                    .then(response =>{
+                        if (!response.ok) {
+                            // show error
+                            this.$router.push({ name: '404'})
+                        } else {
+                            this.$router.push({ name: 'dashboard', params: { email: this.loginForm.email }})
+                        }
+                    })
+                } else {
+                    console.log('error')
+                }
             },
+            checkValidation() {
+                this.$refs.form.validate()
+            }
         },
         watch: {
             loading() {
-                setTimeout(() => (this.loading = false), 3000);
+                setTimeout(() => (this.loading = false), 2000);
             },
             "loginForm.password": function () {
                 console.log("called here");
