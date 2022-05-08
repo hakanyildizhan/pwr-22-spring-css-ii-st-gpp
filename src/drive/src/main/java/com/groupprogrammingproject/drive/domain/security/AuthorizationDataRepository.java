@@ -10,7 +10,7 @@ import java.util.UUID;
 @EnableScan
 @Repository
 public interface AuthorizationDataRepository extends CrudRepository<AuthorizationData, UUID> {
-
+    @Override
     Optional<AuthorizationData> findById(UUID id);
 
     Optional<AuthorizationData> findByEmail(String email);

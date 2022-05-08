@@ -1,5 +1,6 @@
 package com.groupprogrammingproject.drive.account.service;
 
+import com.groupprogrammingproject.drive.account.AccountRecoveryRepository;
 import com.groupprogrammingproject.drive.account.dto.AccountCreationRequest;
 import com.groupprogrammingproject.drive.account.dto.AccountCreationResponse;
 import com.groupprogrammingproject.drive.domain.security.AuthorizationData;
@@ -33,6 +34,9 @@ public class AccountModificationApplicationServiceTest {
     @Mock
     private AuthorizationDataRepository authorizationDataRepository;
 
+    @Mock
+    private AccountRecoveryRepository accountRecoveryRepository;
+
     @InjectMocks
     private AccountModificationApplicationService accountModificationApplicationService;
 
@@ -40,7 +44,8 @@ public class AccountModificationApplicationServiceTest {
     void setUp() {
         accountModificationApplicationService = new AccountModificationApplicationService(
                 passwordEncoder,
-                authorizationDataRepository
+                authorizationDataRepository,
+                accountRecoveryRepository
         );
     }
 

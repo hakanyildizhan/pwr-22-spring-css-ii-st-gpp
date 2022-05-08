@@ -29,6 +29,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Value("${drive.secret}")
     private String secret;
 
+    private static CorsConfiguration corsConfiguration(HttpServletRequest request) {
+        CorsConfiguration config = new CorsConfiguration().applyPermitDefaultValues();
+        config.addAllowedMethod(PUT);
+        config.addAllowedMethod(DELETE);
+        return config;
+    }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -47,12 +54,5 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .addFilter(new AuthorizationFilter(authenticationManager(), userDetailsService, secret))
                 .exceptionHandling()
                 .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
-    }
-
-    private static CorsConfiguration corsConfiguration(HttpServletRequest request) {
-        CorsConfiguration config = new CorsConfiguration().applyPermitDefaultValues();
-        config.addAllowedMethod(PUT);
-        config.addAllowedMethod(DELETE);
-        return config;
     }
 }

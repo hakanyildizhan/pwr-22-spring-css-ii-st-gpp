@@ -17,8 +17,8 @@ public class AccountControllerSecurityTest extends ContextTestBase {
     @Test
     void shouldAllowAllUsersRegister() throws Exception {
         mockMvc.perform(post(ACCOUNTS)
-                .content(accountCreationRequest())
-                .header(CONTENT_TYPE, APPLICATION_JSON))
+                        .content(accountCreationRequest())
+                        .header(CONTENT_TYPE, APPLICATION_JSON))
                 .andExpect(status().isCreated());
     }
 

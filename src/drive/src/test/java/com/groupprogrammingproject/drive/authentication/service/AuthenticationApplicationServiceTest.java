@@ -3,7 +3,6 @@ package com.groupprogrammingproject.drive.authentication.service;
 import com.groupprogrammingproject.drive.authentication.dto.AuthenticationRequest;
 import com.groupprogrammingproject.drive.authentication.dto.AuthenticationResponse;
 import com.groupprogrammingproject.drive.configuration.DriveProperties;
-import com.groupprogrammingproject.drive.domain.security.AccountStatus;
 import com.groupprogrammingproject.drive.domain.security.AuthorizationData;
 import com.groupprogrammingproject.drive.domain.security.AuthorizationDataRepository;
 import com.groupprogrammingproject.drive.exception.IncorrectPasswordException;

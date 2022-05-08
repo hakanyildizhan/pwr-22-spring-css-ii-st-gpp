@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.groupprogrammingproject.drive.ContextTestBase;
 import com.groupprogrammingproject.drive.account.dto.AccountCreationRequest;
 import com.groupprogrammingproject.drive.exception.ExceptionCode;
-import com.groupprogrammingproject.drive.exception.ExceptionMessage;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -29,8 +28,8 @@ public class AccountControllerComponentTest extends ContextTestBase {
     @Test
     void shouldReturn201WhenCreatingAccount() throws Exception {
         mockMvc.perform(post("/accounts")
-                .content(accountCreationRequest())
-                .header(CONTENT_TYPE, APPLICATION_JSON))
+                        .content(accountCreationRequest())
+                        .header(CONTENT_TYPE, APPLICATION_JSON))
                 .andExpect(status().isCreated());
     }
 
@@ -41,33 +40,34 @@ public class AccountControllerComponentTest extends ContextTestBase {
                 .header(CONTENT_TYPE, APPLICATION_JSON));
 
         mockMvc.perform(post("/accounts")
-                .content(accountCreationRequest(INVALID_EMAIL, PASSWORD))
-                .header(CONTENT_TYPE, APPLICATION_JSON))
+                        .content(accountCreationRequest(INVALID_EMAIL, PASSWORD))
+                        .header(CONTENT_TYPE, APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value(ExceptionCode.ACCOUNT_ALREADY_EXISTS))
                 .andExpect(jsonPath("$.message").value(ACCOUNT_ALREADY_EXISTS));
     }
+
     @Test
     void shouldReturn400WhenCreatingAccountWithoutEmail() throws Exception {
         mockMvc.perform(post("/accounts")
-                .content(invalidAccountCreationRequest(null, PASSWORD))
-                .header(CONTENT_TYPE, APPLICATION_JSON))
+                        .content(invalidAccountCreationRequest(null, PASSWORD))
+                        .header(CONTENT_TYPE, APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     void shouldReturn400WhenCreatingAccountWithInvalidEmail() throws Exception {
         mockMvc.perform(post("/accounts")
-                .content(invalidAccountCreationRequest(null, PASSWORD))
-                .header(CONTENT_TYPE, APPLICATION_JSON))
+                        .content(invalidAccountCreationRequest(null, PASSWORD))
+                        .header(CONTENT_TYPE, APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     void shouldReturn400WhenCreatingAccountWithoutPassword() throws Exception {
         mockMvc.perform(post("/accounts")
-                .content(invalidAccountCreationRequest(EMAIL, ""))
-                .header(CONTENT_TYPE, APPLICATION_JSON))
+                        .content(invalidAccountCreationRequest(EMAIL, ""))
+                        .header(CONTENT_TYPE, APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
 

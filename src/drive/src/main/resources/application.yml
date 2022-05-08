@@ -6,6 +6,16 @@ spring:
         gsiProjectionType: ALL
         readCapacity: 10
         writeCapacity: 1
+  mail:
+    host: smtp.mailtrap.io
+    port: 587
+    username: 045163784b0e8b
+    password: 4134619ffae8a7
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
 drive:
   secret: default-secret
 amazon:

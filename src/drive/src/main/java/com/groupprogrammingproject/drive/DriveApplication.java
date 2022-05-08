@@ -9,8 +9,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 @EnableConfigurationProperties(DriveProperties.class)
 public class DriveApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(DriveApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(DriveApplication.class, args);
+    }
 
 }

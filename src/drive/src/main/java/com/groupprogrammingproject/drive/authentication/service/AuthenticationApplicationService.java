@@ -6,7 +6,6 @@ import com.groupprogrammingproject.drive.configuration.DriveProperties;
 import com.groupprogrammingproject.drive.domain.security.AccountStatus;
 import com.groupprogrammingproject.drive.domain.security.AuthorizationData;
 import com.groupprogrammingproject.drive.domain.security.AuthorizationDataRepository;
-
 import com.groupprogrammingproject.drive.exception.BlockedAccountException;
 import com.groupprogrammingproject.drive.exception.IncorrectPasswordException;
 import com.groupprogrammingproject.drive.exception.NonexistentAccountException;

@@ -1,12 +1,8 @@
 package com.groupprogrammingproject.drive.account.controller;
 
-import com.groupprogrammingproject.drive.account.dto.AccountCreationRequest;
-import com.groupprogrammingproject.drive.account.dto.AccountCreationResponse;
+import com.groupprogrammingproject.drive.account.dto.*;
 import com.groupprogrammingproject.drive.account.service.AccountModificationApplicationService;
-import com.groupprogrammingproject.drive.exception.AccountWithGivenEmailAlreadyExists;
-import com.groupprogrammingproject.drive.exception.ErrorBody;
-import com.groupprogrammingproject.drive.exception.ExceptionCode;
-import com.groupprogrammingproject.drive.exception.UserDoesNotExistException;
+import com.groupprogrammingproject.drive.exception.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.*;
@@ -22,11 +18,26 @@ import static org.springframework.http.HttpStatus.*;
 @RequiredArgsConstructor
 public class AccountController {
 
+    public static final String FORGOT_PASSWORD = "/forgot-password";
+    public static final String RESET_PASSWORD = FORGOT_PASSWORD + "/reset";
+
     public static final String ACCOUNTS = "/accounts";
 
     public static final String ACCOUNT_DETAILS_URL = ACCOUNTS + "/{userId}";
 
     private final AccountModificationApplicationService accountModificationApplicationService;
+
+    @PostMapping(FORGOT_PASSWORD)
+    @ResponseStatus(OK)
+    public ForgotPasswordResponse forgotPassword(@RequestBody @Valid ForgotPasswordRequest forgotPasswordRequest) {
+        return accountModificationApplicationService.forgotPassword(forgotPasswordRequest);
+    }
+
+    @PostMapping(RESET_PASSWORD)
+    @ResponseStatus(OK)
+    public ResetPasswordResponse resetPassword(@RequestBody @Valid ResetPasswordRequest resetPasswordRequest) {
+        return accountModificationApplicationService.resetPassword(resetPasswordRequest);
+    }
 
     @PostMapping(ACCOUNTS)
     @ResponseStatus(CREATED)
@@ -55,10 +66,20 @@ public class AccountController {
 
     @ResponseStatus(BAD_REQUEST)
     @ExceptionHandler(AccountWithGivenEmailAlreadyExists.class)
-    public ErrorBody handleUserDoesNotExistException(AccountWithGivenEmailAlreadyExists exception) {
+    public ErrorBody handleUserAlreadyExistException(AccountWithGivenEmailAlreadyExists exception) {
         return ErrorBody.builder()
                 .message(ACCOUNT_ALREADY_EXISTS)
                 .code(ExceptionCode.ACCOUNT_ALREADY_EXISTS)
+                .build();
+    }
+
+    @ResponseStatus(NOT_FOUND)
+    @ExceptionHandler(TokenDoesNotExistOrExpiredException.class)
+    public ErrorBody handleUserDoesNotExistException(TokenDoesNotExistOrExpiredException exception) {
+        // TODO: message + code
+        return ErrorBody.builder()
+                .message(NONEXISTENT_ACCOUNT_MESSAGE)
+                .code(NONEXISTENT_ACCOUNT)
                 .build();
     }
 }

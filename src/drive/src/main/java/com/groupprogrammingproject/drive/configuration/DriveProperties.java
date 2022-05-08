@@ -8,5 +8,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class DriveProperties {
 
     private String secret;
-    
+
 }

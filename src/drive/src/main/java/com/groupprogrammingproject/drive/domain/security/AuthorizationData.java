@@ -25,9 +25,13 @@ public class AuthorizationData {
     public AuthorizationData() {
     }
 
-    @DynamoDBHashKey(attributeName="id")
+    @DynamoDBHashKey(attributeName = "id")
     public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     @DynamoDBAttribute
@@ -36,9 +40,17 @@ public class AuthorizationData {
         return email;
     }
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     @DynamoDBAttribute
     public String getPassword() {
         return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @DynamoDBAttribute
@@ -46,25 +58,13 @@ public class AuthorizationData {
         return role;
     }
 
+    public void setRole(String role) {
+        this.role = role;
+    }
+
     @DynamoDBAttribute
     public String getStatus() {
         return status;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
     }
 
     public void setStatus(String status) {
