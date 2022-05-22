@@ -3,7 +3,7 @@ package com.groupprogrammingproject.drive.authentication.controller;
 import com.groupprogrammingproject.drive.authentication.dto.AuthenticationRequest;
 import com.groupprogrammingproject.drive.authentication.dto.AuthenticationResponse;
 import com.groupprogrammingproject.drive.authentication.service.AuthenticationApplicationService;
-import com.groupprogrammingproject.drive.exception.BlockedAccountException;
+import com.groupprogrammingproject.drive.exception.InactiveAccountException;
 import com.groupprogrammingproject.drive.exception.ErrorBody;
 import com.groupprogrammingproject.drive.exception.IncorrectPasswordException;
 import com.groupprogrammingproject.drive.exception.NonexistentAccountException;
@@ -51,11 +51,11 @@ public class AuthenticationController {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(BlockedAccountException.class)
-    public ErrorBody handleBlockedAccountException(BlockedAccountException exception) {
+    @ExceptionHandler(InactiveAccountException.class)
+    public ErrorBody handleBlockedAccountException(InactiveAccountException exception) {
         return ErrorBody.builder()
                 .code(ACCOUNT_IS_BLOCKED)
-                .message(ACCOUNT_IS_BLOCKED_MESSAGE)
+                .message(ACCOUNT_INACTIVE_MESSAGE)
                 .build();
     }
 }

@@ -6,6 +6,14 @@ spring:
         gsiProjectionType: ALL
         readCapacity: 10
         writeCapacity: 1
+  mail:
+   host: smtp.gmail.com
+   port: 587
+   username: pwr22gpp@gmail.com
+   password: shhgcihwstngxglw
+   properties.mail.smtp.auth: true
+   properties.mail.smtp.starttls.enable: true
+
 drive:
   secret: default-secret
 amazon:

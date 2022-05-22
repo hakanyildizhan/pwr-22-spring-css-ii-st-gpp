@@ -14,12 +14,15 @@ public class AuthorizationData {
     private String role;
     private String status;
 
-    public AuthorizationData(String id, String email, String password, String role, String status) {
+    private String activationId;
+
+    public AuthorizationData(String id, String email, String password, String role, String status, String activationId) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.role = role;
         this.status = status;
+        this.activationId = activationId;
     }
 
     public AuthorizationData() {
@@ -51,6 +54,11 @@ public class AuthorizationData {
         return status;
     }
 
+    @DynamoDBAttribute
+    public String getActivationId() {
+        return activationId;
+    }
+
     public void setId(String id) {
         this.id = id;
     }
@@ -69,5 +77,9 @@ public class AuthorizationData {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public void setActivationId(String activationId) {
+        this.activationId = activationId;
     }
 }

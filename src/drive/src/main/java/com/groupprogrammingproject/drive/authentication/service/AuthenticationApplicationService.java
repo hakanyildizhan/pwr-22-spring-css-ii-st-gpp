@@ -7,14 +7,14 @@ import com.groupprogrammingproject.drive.domain.security.AccountStatus;
 import com.groupprogrammingproject.drive.domain.security.AuthorizationData;
 import com.groupprogrammingproject.drive.domain.security.AuthorizationDataRepository;
 
-import com.groupprogrammingproject.drive.exception.BlockedAccountException;
+import com.groupprogrammingproject.drive.exception.InactiveAccountException;
 import com.groupprogrammingproject.drive.exception.IncorrectPasswordException;
 import com.groupprogrammingproject.drive.exception.NonexistentAccountException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import static com.groupprogrammingproject.drive.domain.security.AccountStatus.BLOCKED;
+import static com.groupprogrammingproject.drive.domain.security.AccountStatus.INACTIVE;
 
 @Service
 @RequiredArgsConstructor
@@ -32,7 +32,7 @@ public class AuthenticationApplicationService {
         AuthorizationData authorizationData = authorizationDataRepository.findByEmail(authenticationRequest.getEmail())
                 .orElseThrow(NonexistentAccountException::new);
         throwExceptionForIncorrectPassword(authenticationRequest, authorizationData);
-        throwExceptionForBlockedUser(authorizationData);
+        throwExceptionForInactiveUser(authorizationData);
         String token = generateToken(authorizationData);
         return authenticationResponse(token, authorizationData.getEmail());
     }
@@ -43,9 +43,9 @@ public class AuthenticationApplicationService {
         }
     }
 
-    private void throwExceptionForBlockedUser(AuthorizationData authorizationData) {
-        if (AccountStatus.valueOf(authorizationData.getStatus()) == BLOCKED) {
-            throw new BlockedAccountException();
+    private void throwExceptionForInactiveUser(AuthorizationData authorizationData) {
+        if (AccountStatus.valueOf(authorizationData.getStatus()) == INACTIVE) {
+            throw new InactiveAccountException();
         }
     }
 

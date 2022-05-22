@@ -33,6 +33,9 @@ public class AccountModificationApplicationServiceTest {
     @Mock
     private AuthorizationDataRepository authorizationDataRepository;
 
+    @Mock
+    private AccountCreationConfirmationEmailSender emailSender;
+
     @InjectMocks
     private AccountModificationApplicationService accountModificationApplicationService;
 
@@ -40,7 +43,8 @@ public class AccountModificationApplicationServiceTest {
     void setUp() {
         accountModificationApplicationService = new AccountModificationApplicationService(
                 passwordEncoder,
-                authorizationDataRepository
+                authorizationDataRepository,
+                emailSender
         );
     }
 
