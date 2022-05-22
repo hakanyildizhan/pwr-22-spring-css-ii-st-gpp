@@ -2,15 +2,13 @@ package com.groupprogrammingproject.drive.files.upload;
 
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.Bucket;
-import com.amazonaws.services.s3.model.PutObjectResult;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
+import java.io.IOException;
 
 @Slf4j
 @Service
@@ -19,8 +17,9 @@ public class FileUploadService {
 
     private final AmazonS3 amazonS3;
 
-    public void putObject() {
+    public String uploadFile(MultipartFile file) throws IOException {
         log.info("Buckets: {}", amazonS3.listBuckets());
-        amazonS3.putObject("sample", "files/sample.txt", "src/test-file.txt");
+        amazonS3.putObject("sample", file.getName(), file.getInputStream(), new ObjectMetadata());
+        return "File saved";
     }
 }
