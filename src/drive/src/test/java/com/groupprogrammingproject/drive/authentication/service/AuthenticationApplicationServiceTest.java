@@ -17,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import static com.groupprogrammingproject.drive.domain.security.AccountStatus.ACTIVE;
 import static java.util.UUID.randomUUID;
@@ -95,6 +96,7 @@ public class AuthenticationApplicationServiceTest {
                 EMAIL,
                 ENCRYPTED_PASSWORD,
                 "ROLE_USER",
-                ACTIVE.name());
+                ACTIVE.name(),
+                UUID.randomUUID().toString());
     }
 }

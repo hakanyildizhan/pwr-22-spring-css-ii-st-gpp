@@ -34,6 +34,15 @@ public class AccountController {
         return accountModificationApplicationService.createAccount(accountCreationRequest);
     }
 
+    @GetMapping(ACCOUNTS)
+    public String activateAccount(@RequestParam("action") String action, @RequestParam("activationId") String activationId) {
+        if (action.equals("activation")) {
+            accountModificationApplicationService.activateAccount(activationId);
+            return "Account activated";
+        }
+        return "Incorrect action";
+    }
+
     @ResponseStatus(BAD_REQUEST)
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ErrorBody handleDataIntegrityViolationException(DataIntegrityViolationException exception) {
