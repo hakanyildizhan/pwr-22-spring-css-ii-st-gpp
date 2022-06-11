@@ -1,7 +1,21 @@
 <template>
   <v-app id="app">
     <my-appbar />
-    <v-main> Please check your email at {{ $route.params.email }} to confirm your account.</v-main>
+    <v-main>
+      <v-card class="justify-center py-15" elevation="3" rounded="0">
+        <v-card-title class="justify-center">
+          <span class="text-green-darken-3">Email Confirmation</span>
+        </v-card-title>
+        <v-card-text>
+          <v-card-title class="justify-center">
+            <span class="text-red-lighten-3"
+              >Please check your email at {{ $route.params.email }} to confirm
+              your account.</span
+            >
+          </v-card-title>
+        </v-card-text>
+      </v-card>
+    </v-main>
   </v-app>
 </template>
 
@@ -12,5 +26,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>
