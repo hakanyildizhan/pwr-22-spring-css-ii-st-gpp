@@ -9,7 +9,7 @@
                         <v-card-text>
                             <v-card-title class="justify-center">
                                 <template v-if="showErrorSnack">
-                                    <span class="text-red-lighten-3">Email exists</span>
+                                    <span class="text-red-lighten-3">{{this.validationError}}</span>
                                 </template>
                             </v-card-title>
                             <v-card class="px-16" elevation="0">
@@ -65,6 +65,7 @@
     export default {
         name: "LoginForm",
         data:()=>({
+            validationError: 'Incorrect email or password. Please try again.',
             valid: true,
             showErrorSnack: false,
             loading: false,
@@ -81,7 +82,7 @@
                     v => /[A-Z]/.test(v) || "Password does not contain uppercase",
                     v => /[a-z]/.test(v) || "Password does not contain lowercase",
                     v => /[0-9]/.test(v) || "Password does not contain number",
-                    v => /[!@#$%^&*]/.test(v) || "Password does not contain a special character",
+                    v => /[!@#$%^&.+-/*{}()[\]"'=]/.test(v) || "Password does not contain a special character",
                 ],
                 emailRules: [
                     v => !!v || 'E-mail is required',
@@ -96,7 +97,7 @@
         methods: {
             submitLogin(){
                 this.loading=true;
-                this.showErrorSnack=true;
+                this.showErrorSnack=false;
 
                 if (this.$refs.form.validate()) {
                     const requestOptions = {
@@ -112,7 +113,12 @@
                     .then(response =>{
                         if (!response.ok) {
                             // show error
-                            this.$router.push({ name: '404'})
+                            if (response.status == 400) {
+                                this.validationError = 'Incorrect email or password. Please try again.';
+                            } else {
+                                this.validationError = 'An unknown error occurred. Please try again.';
+                            }
+                            this.showErrorSnack=true;
                         } else {
                             this.$router.push({ name: 'dashboard', params: { email: this.loginForm.email }})
                         }

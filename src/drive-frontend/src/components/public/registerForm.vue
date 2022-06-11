@@ -9,7 +9,7 @@
                         <v-card-text>
                             <v-card-title class="justify-center">
                                 <template v-if="showErrorSnack">
-                                    <span class="text-red-lighten-3">Email exists</span>
+                                    <span class="text-red-lighten-3">{{this.validationError}}</span>
                                 </template>
                             </v-card-title>
                             <v-card class="px-16" elevation="0">
@@ -18,7 +18,7 @@
                                         label="Email"
                                         v-model="registrationForm.email"
                                         :rules="registrationValidate.emailRules"
-                                        @keydown="checkValidation"
+                                        @change="checkValidation"
                                     />
                                     <v-text-field
                                         label="Password"
@@ -26,7 +26,7 @@
                                         @click="showPasswordValidations=true"
                                         v-model="registrationForm.password"
                                         :rules="registrationValidate.passwordRules"
-                                        @keydown="checkValidation"
+                                        @change="checkValidation"
                                     />
                                     <v-card-title class="justify-center">
                                        <v-btn
@@ -57,6 +57,7 @@
     export default {
         name: "RegisterForm",
         data:()=>({
+            validationError: 'Email exists',
             valid: true,
             showErrorSnack: false,
             loading: false,
@@ -73,7 +74,7 @@
                     v => /[A-Z]/.test(v) || "Password does not contain uppercase",
                     v => /[a-z]/.test(v) || "Password does not contain lowercase",
                     v => /[0-9]/.test(v) || "Password does not contain number",
-                    v => /[!@#$%^&*]/.test(v) || "Password does not contain a special character",
+                    v => /[!@#$%^&.+-/*{}()[\]"'=]/.test(v) || "Password does not contain a special character",
                 ],
                 emailRules: [
                     v => !!v || 'E-mail is required',
@@ -88,8 +89,7 @@
         methods: {
             submitRegistration(){
                 this.loading=true;
-                this.showErrorSnack=true;
-                
+                this.showErrorSnack=false;
                 if (this.$refs.form.validate()) {
                     // send email & password to the backend
                     const requestOptions = {
@@ -105,13 +105,23 @@
                     .then(response =>{
                         if (!response.ok) {
                             // show error
-                            this.$router.push({ name: '404'})
+                            if (response.status == 400) {
+                                this.validationError='Email exists. Please try with another.';
+                            } else {
+                                this.validationError='Unknown error occurred. Please try again.';
+                            }
+                            this.showErrorSnack=true;
                         } else {
                             this.$router.push({ name: 'emailConfirm', params: { email: this.registrationForm.email }})
                         }
                     })
+                    .catch(_ => {
+                        this.validationError='An error occurred. Please try again.';
+                        this.showErrorSnack=true;
+                    })
                 } else {
-                    console.log('error')
+                    this.validationError='An error occurred. Please try again.';
+                    this.showErrorSnack=true;
                 }
             },
             goToLoginPage() {
