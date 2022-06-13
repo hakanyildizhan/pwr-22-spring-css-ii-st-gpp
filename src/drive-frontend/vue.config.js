@@ -6,11 +6,12 @@ module.exports = defineConfig({
 
   configureWebpack: {
     plugins: [new VuetifyLoaderPlugin({ autoImport: true })],
+    devtool: 'source-map'
   },
 
   pluginOptions: {
     vuetify: {
 			// https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vuetify-loader
-		}
+		},
   }
 })

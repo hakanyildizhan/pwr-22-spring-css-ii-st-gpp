@@ -1,0 +1,32 @@
+spring:
+  data:
+    dynamodb:
+      entity2ddl:
+        auto: create
+        gsiProjectionType: ALL
+        readCapacity: 10
+        writeCapacity: 1
+  mail:
+   host: smtp.gmail.com
+   port: 587
+   username: pwr22gpp@gmail.com
+   password: shhgcihwstngxglw
+   properties.mail.smtp.auth: true
+   properties.mail.smtp.starttls.enable: true
+
+drive:
+  secret: default-secret
+amazon:
+  s3:
+    endpoint: http://s3.localhost.localstack.cloud:4566/
+  dynamodb:
+    endpoint: http://localhost:8000/
+  aws:
+    accesskey: test
+    secretkey: test
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

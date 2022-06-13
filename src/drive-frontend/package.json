@@ -11,6 +11,7 @@
     "@mdi/font": "5.9.55",
     "@mdi/js": "^6.6.96",
     "core-js": "^3.8.3",
+    "form-data": "^4.0.0",
     "roboto-fontface": "*",
     "vue": "^3.2.13",
     "vue-loader": "^17.0.0",
@@ -43,7 +44,12 @@
     "parserOptions": {
       "parser": "@babel/eslint-parser"
     },
-    "rules": {}
+    "rules": {
+      "no-unused-vars": ["warn", {
+        "argsIgnorePattern": "_",
+        "varsIgnorePattern": "_"
+      }]
+    }
   },
   "browserslist": [
     "> 1%",
