@@ -2,8 +2,8 @@
     <v-main>
         <v-card style="height: 80vh; background-color: #E8F5E9" rounded="0"> 
             <v-row>
-                <v-col cols="6"></v-col>
-                <v-col cols="6" class="py-10 my-auto">
+                <v-col cols="5"></v-col>
+                <v-col cols="7" class="py-10 my-auto">
                     <v-card class="justify-center py-15" elevation="3" rounded="0">
                         <v-card-title class="justify-center"><span class="text-green-darken-3">Register</span></v-card-title>
                         <v-card-text>
@@ -90,6 +90,7 @@
             submitRegistration(){
                 this.loading=true;
                 this.showErrorSnack=false;
+
                 if (this.$refs.form.validate()) {
                     // send email & password to the backend
                     const requestOptions = {
@@ -101,8 +102,9 @@
                                 password: this.registrationForm.password 
                             })
                     };
-                    fetch("http://localhost:8080/accounts", requestOptions)
+                    fetch(process.env.VUE_APP_BACKEND_URL + "/accounts", requestOptions)
                     .then(response =>{
+                        this.loading=false;
                         if (!response.ok) {
                             // show error
                             if (response.status == 400) {
@@ -116,10 +118,12 @@
                         }
                     })
                     .catch(_ => {
+                        this.loading=false;
                         this.validationError='An error occurred. Please try again.';
                         this.showErrorSnack=true;
                     })
                 } else {
+                    this.loading=false;
                     this.validationError='An error occurred. Please try again.';
                     this.showErrorSnack=true;
                 }
@@ -133,9 +137,6 @@
             }
         },
         watch: {
-            loading() {
-                setTimeout(() => (this.loading = false), 2000);
-            },
             "registartionForm.password": function () {
                 console.log("called here");
                 if (this.registrationForm.password.length > 6) {

@@ -2,8 +2,8 @@
     <v-main>
         <v-card style="height: 80vh; background-color: #E8F5E9" rounded="0"> 
             <v-row>
-                <v-col cols="6"></v-col>
-                <v-col cols="6" class="py-10 my-auto">
+                <v-col cols="5"></v-col>
+                <v-col cols="7" class="py-10 my-auto">
                     <v-card class="justify-center py-15" elevation="3" rounded="0">
                         <v-card-title class="justify-center"><span class="text-green-darken-3">Login</span></v-card-title>
                         <v-card-text>
@@ -62,9 +62,12 @@
 </template>
 
 <script>
+import { store } from '../../store'
+
     export default {
         name: "LoginForm",
         data:()=>({
+            store,
             validationError: 'Incorrect email or password. Please try again.',
             valid: true,
             showErrorSnack: false,
@@ -109,8 +112,9 @@
                                 password: this.loginForm.password 
                             })
                     };
-                    fetch("http://localhost:8080/login", requestOptions)
+                    fetch(process.env.VUE_APP_BACKEND_URL + "/login", requestOptions)
                     .then(response =>{
+                        this.loading=false;
                         if (!response.ok) {
                             // show error
                             if (response.status == 400) {
@@ -120,10 +124,18 @@
                             }
                             this.showErrorSnack=true;
                         } else {
-                            this.$router.push({ name: 'dashboard', params: { email: this.loginForm.email }})
+                            return response.json();
+                        }
+                    })
+                    .then(data => {
+                        if (data) {
+                            this.store.setToken(data.token)
+                            this.store.setUser(data.userId)
+                            this.$router.push({ name: 'dashboard', params: { email: data.userId }})
                         }
                     })
                 } else {
+                    this.loading=false;
                     console.log('error')
                 }
             },
@@ -132,11 +144,7 @@
             }
         },
         watch: {
-            loading() {
-                setTimeout(() => (this.loading = false), 2000);
-            },
             "loginForm.password": function () {
-                console.log("called here");
                 if (this.loginForm.password.length > 6) {
                     this.passwordLengthvalid = true;
                 } else {
