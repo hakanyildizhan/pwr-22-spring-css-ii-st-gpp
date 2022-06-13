@@ -1,21 +1,16 @@
 import { createRouter, createWebHistory  } from 'vue-router'
 import RegisterView from '@/views/Register'
 import DashboardView from "../views/Dashboard"
-import EmailRedirect from "../components/public/emailRedirect"
 import EmailConfrim from "../views/emailConfirm.vue"
 import LoginView from "@/views/Login.vue"
 import PageNotFound from "../views/404.vue"
+import { store } from '../store'
 
 const routes = [
   {
     path: '/',
     name: 'home',
     component: RegisterView
-  },
-  {
-    path: '/email',
-    name: 'email',
-    component: EmailRedirect
   },
   {
     path: '/dashboard',
@@ -56,6 +51,19 @@ const router = createRouter({
   history: createWebHistory(),
   base: process.env.BASE_URL,
   routes: routes
+})
+
+router.beforeEach((to, from) => {
+  let isAuthenticated = store.getToken() && store.getToken() !== '';
+
+  if ((to.name == 'login' || to.name == 'register' || to.name == 'home') && isAuthenticated) {
+    return { name: 'dashboard' }
+  } else if (to.name == 'dashboard' && !isAuthenticated) {
+    return { name: 'login' }
+  } else if (to.name == 'emailConfirm' && from.name != 'home' && from.name != 'register') {
+    return { name: '404' }
+  }
+  return true
 })
 
 export default router

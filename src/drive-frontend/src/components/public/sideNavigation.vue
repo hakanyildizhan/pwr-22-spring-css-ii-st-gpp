@@ -1,4 +1,5 @@
 <script>
+import { store } from '../../store'
 
 export default {
     name: 'sideNavigation',
@@ -7,6 +8,11 @@ export default {
         type: String,
         title: String
     },
+    data() {
+      return {
+        store
+      }
+    }
 }
 </script>
 
@@ -20,7 +26,7 @@ export default {
         <v-list-item
           prepend-avatar="https://icon-library.com/images/anonymous-user-icon/anonymous-user-icon-2.jpg"
           title="User"
-          :subtitle="$route.params.email"
+          :subtitle="this.store.getUser()"
         ></v-list-item>
       </v-list>
 
