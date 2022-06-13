@@ -1,6 +1,136 @@
+<script>
+import fileItem from "./fileItem";
+
+export default {
+  name: "fileItemList",
+  components: {
+    fileItem,
+  },
+  data() {
+    return {
+      files:[
+        {
+          name:'cv.pdf',
+          owner:'me',
+          lastmodified:'2022-02-01',
+          filesize:1.2
+        },
+         {
+          name:'ml_for_researcher.pdf',
+          owner:'me',
+          lastmodified:'2022-02-01',
+          filesize:1.2
+        }
+      ],
+      items: [
+        {
+          id: "0B0tQEjbz9YbuS1ZQdXdaSGRydzg",
+          type: "folder",
+          title: "Folder 1",
+        },
+        {
+          id: "0B0tQEjbz9YbuS1ZAdXdaSGRydzg",
+          type: "folder",
+          title: "Folder 2",
+        },
+        {
+          id: "0B0tQEjbz9YbuS1ZAdWdaaGRydzg",
+          type: "folder",
+          title: "Folder 3",
+        },
+        {
+          id: "0B0tQajbz9YbuS1ZAdXdaaGRydzg",
+          type: "file",
+          title: "File 1",
+        },
+        {
+          id: "0B0tQajbz9YbuS1ZAdXdaaGRadzg",
+          type: "file",
+          title: "File 2",
+        },
+      ],
+    };
+  },
+  computed:{
+  //   sortedfiles(){
+  //     return this.files.sort((a,b)=>{
+  //         const aName  = a.name.toUpperCase();
+  //         const bName  = b.name.toUpperCase();
+  //         let comparison = 0;
+  //         if (aName > bName) {
+  //   comparison = 1;
+  // } else if (aName < bName) {
+  //   comparison = -1;
+  // }
+  //         return comparison;
+  //     });
+  //   }
+   
+  },
+  methods: {
+    getFolders() {
+      return this.items.filter((item) => item.type == "folder");
+    },
+    getFiles() {
+      return this.items.filter((item) => item.type == "file");
+    },
+    startDrag(event, item) {
+      event.dataTransfer.dropEffect = "move";
+      event.dataTransfer.effectAllowed = "move";
+      event.dataTransfer.setData("itemID", item.id);
+    },
+    onDrop(event) {
+      const sourceItemId = event.dataTransfer.getData("itemID");
+      const sourceItem = this.items.filter((i) => i.id == sourceItemId)[0];
+      const targetItem = this.items.filter(
+        (i) => i.title == event.target.outerText.trim()
+      )[0];
+      if (sourceItem.id == targetItem.id || targetItem.type == "file") {
+        return;
+      }
+      console.log(sourceItem.title + "-->" + targetItem.title);
+    },
+  },
+};
+</script>
+
 <template>
   <v-main>
     <v-container fluid class="grey lighten-5 mb-6">
+      <!-- start data table -->
+         <v-table>
+           <thead>
+             <th class="text-left">
+                Name
+                <v-icon
+      large
+      color="green darken-2"
+    >
+      mdi-arrow-up
+    </v-icon>
+             </th>
+             <th class="text-left">
+                Owner
+             </th>
+             <th class="text-left">
+                Last Modified
+             </th>
+              <th class="text-left">
+                File Size
+             </th>
+           </thead>
+             <tbody>
+               <tr v-for="(file,index) in files" :key="index">
+               <td>  {{file.name}}</td>
+               <td>  {{file.owner}}</td>
+               <td>  {{file.lastmodified}}</td>
+               <td>  {{file.filesize}}</td>
+                
+               </tr>
+             </tbody>
+         </v-table>
+
+      <!-- end data table  -->
       <div class="item-type">Folders</div>
       <div
         class="drop-zone"
