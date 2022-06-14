@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.groupprogrammingproject.drive.ContextTestBase;
 import com.groupprogrammingproject.drive.account.dto.AccountCreationRequest;
 import com.groupprogrammingproject.drive.exception.ExceptionCode;
-import com.groupprogrammingproject.drive.exception.ExceptionMessage;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
