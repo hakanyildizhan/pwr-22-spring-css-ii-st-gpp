@@ -20,5 +20,5 @@ As a response, you get the bucket's URL: `http://<bucket-name>.s3.localhost.loca
 
 To list the buckets, run `awslocal s3api list-buckets`
 
-Go to `http://s3.localhost.localstack.cloud:4566/sample` and check if file lands on local s3 bucket named `sample` once you invoke `GET http://localhost:8080/files endpoint`
+Go to `http://s3.localhost.localstack.cloud:4566/drive` and check if file lands on local s3 bucket named `drive` once you invoke `GET http://localhost:8080/files endpoint`
 The endpoint still needs polishing, for now it's just a spike

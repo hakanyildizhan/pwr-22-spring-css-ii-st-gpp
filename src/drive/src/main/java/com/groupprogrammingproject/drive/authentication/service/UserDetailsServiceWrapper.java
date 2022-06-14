@@ -1,14 +1,16 @@
 package com.groupprogrammingproject.drive.authentication.service;
 
-import com.groupprogrammingproject.drive.domain.security.AuthorizationDataRepository;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import com.groupprogrammingproject.drive.domain.security.AuthorizationData;
+import com.groupprogrammingproject.drive.domain.security.AuthorizationDataRepository;
+
+import static com.groupprogrammingproject.drive.domain.security.AccountStatus.ACTIVE;
 
 import java.util.Collection;
 
@@ -16,11 +18,13 @@ import java.util.Collection;
 @RequiredArgsConstructor
 public class UserDetailsServiceWrapper implements UserDetailsService {
 
-    private final AuthorizationDataRepository repository;
+    private final AuthorizationDataRepository authorizationDataRepository;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return new UserDetails() {
+            AuthorizationData user = authorizationDataRepository.findByEmail(email).get();
+
             @Override
             public Collection<? extends GrantedAuthority> getAuthorities() {
                 return null;
@@ -33,17 +37,17 @@ public class UserDetailsServiceWrapper implements UserDetailsService {
 
             @Override
             public String getUsername() {
-                return null;
+                return user.getId();
             }
 
             @Override
             public boolean isAccountNonExpired() {
-                return false;
+                return true;
             }
 
             @Override
             public boolean isAccountNonLocked() {
-                return false;
+                return true;
             }
 
             @Override
@@ -53,9 +57,8 @@ public class UserDetailsServiceWrapper implements UserDetailsService {
 
             @Override
             public boolean isEnabled() {
-                return false;
+                return user.getStatus().equals(ACTIVE.name());
             }
         };
-//        return repository.findByEmail(email).orElse(null);
     }
 }

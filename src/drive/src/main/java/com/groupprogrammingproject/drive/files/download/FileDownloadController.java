@@ -20,7 +20,7 @@ public class FileDownloadController {
 
     private final FileDownloadService fileDownloadService;
 
-    @GetMapping(value = FILES_ENDPOINT)
+    @GetMapping(value = FILES_ENDPOINT + "/downloadFile")
     public ResponseEntity<Resource> downloadFile(@RequestParam("key") String key) {
         try {
             ByteArrayResource resource = new ByteArrayResource(fileDownloadService.downloadFile(key).getInputStream().readAllBytes());

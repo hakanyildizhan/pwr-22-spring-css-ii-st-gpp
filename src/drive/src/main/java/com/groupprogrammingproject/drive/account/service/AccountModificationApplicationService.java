@@ -17,6 +17,8 @@ import static com.groupprogrammingproject.drive.domain.security.AccountStatus.AC
 import static com.groupprogrammingproject.drive.domain.security.AccountStatus.INACTIVE;
 import static java.util.UUID.randomUUID;
 
+import java.util.Optional;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -48,6 +50,16 @@ public class AccountModificationApplicationService {
                         log.info("Account {} activated", account.getId());
                     }
                 });
+    }
+
+    public AuthorizationData getUserByEmail(String email) {
+        Optional<AuthorizationData> account = authorizationDataRepository.findByEmail(email);
+
+        if (account != null) {
+            return account.get();
+        } else {
+            return null;
+        }
     }
 
     private void checkIfAccountWithGivenEmailExists(String email) {
