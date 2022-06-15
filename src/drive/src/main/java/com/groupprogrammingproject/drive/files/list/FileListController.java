@@ -26,12 +26,14 @@ public class FileListController {
     public ResponseEntity<List<FileItem>> getFilesAndFolders(@RequestParam("parentFolder") String parentFolderId) {
         try {
             String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+            boolean root = false;
 
             if (Utils.isRootPath(parentFolderId)) {
                 parentFolderId = userId;
+                root = true;
             }
             
-            List<FileItem> files = fileListService.getFilesAndFoldersUnderPath(parentFolderId);
+            List<FileItem> files = fileListService.getFilesAndFoldersUnderPath(parentFolderId, root);
 
             return ResponseEntity.ok()
                     .contentType(MediaType.APPLICATION_JSON)

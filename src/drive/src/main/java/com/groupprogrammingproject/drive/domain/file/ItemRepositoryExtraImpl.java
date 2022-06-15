@@ -18,10 +18,10 @@ public class ItemRepositoryExtraImpl implements ItemRepositoryExtra {
         this.itemRepository = itemRepository;
     }
 
-    public List<Item> findAllUnderPath(String folderId) {
-        String path = itemRepository.findById(folderId).get().getPath();
+    public List<Item> findAllUnderPath(String path) {
         List<Item> allItemsUnderFolder = Utils.stream(itemRepository.findAll())
-            .filter(i -> i.getPath().startsWith(path) && !i.getPath().replace(path, "").contains("/"))
+            .filter(i -> i.getPath().startsWith(path) && 
+                i.getPath().replace(path, "").length() - i.getPath().replace(path, "").replace("/", "").length() == 1)
             .toList();
 
         return allItemsUnderFolder;

@@ -15,6 +15,11 @@ public class Utils {
         return path.equals(".") || path.equals(".\\") || path.equals("./") || path.isBlank() || path == null;
     }
 
+    public static String getFileKeyFromFullPath(String path) {
+        if (!path.contains("/")) return path;
+        return path.split("/")[path.split("/").length-1];
+    } 
+
     public static <T> Stream<T> stream(Iterable<T> iterable) {
         return StreamSupport.stream(
             Spliterators.spliteratorUnknownSize(
