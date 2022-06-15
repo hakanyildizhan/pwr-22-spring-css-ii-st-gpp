@@ -24,6 +24,7 @@ import static org.springframework.http.HttpMethod.*;
 @RequiredArgsConstructor
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
+    public static final String FILES_ENDPOINT = "/files";
     private final UserDetailsServiceWrapper userDetailsService;
 
     @Value("${drive.secret}")
@@ -43,6 +44,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(ACCOUNT_DETAILS_URL).hasRole(USER)
                 .antMatchers(POST, ACCOUNTS).permitAll()
+                .antMatchers(FILES_ENDPOINT + "/**").hasRole(USER)
                 .and()
                 .addFilter(new AuthorizationFilter(authenticationManager(), userDetailsService, secret))
                 .exceptionHandling()
