@@ -5,12 +5,10 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
-import java.util.UUID;
 
 @EnableScan
 @Repository
-public interface ItemRepository extends CrudRepository<Item, String> {
+public interface ItemRepository extends CrudRepository<Item, String>, ItemRepositoryExtra {
 
     Optional<Item> findById(String id);
-
 }

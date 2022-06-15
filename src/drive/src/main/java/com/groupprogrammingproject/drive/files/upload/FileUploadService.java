@@ -1,6 +1,7 @@
 package com.groupprogrammingproject.drive.files.upload;
 
 
+import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import lombok.RequiredArgsConstructor;
@@ -22,9 +23,19 @@ public class FileUploadService {
     @Value("${amazon.s3.bucket}")
     private String bucketName;
 
-    public String uploadFile(MultipartFile file, String path) throws IOException {
+    public boolean uploadFile(MultipartFile file, String path) throws IOException {
         log.info("Buckets: {}", amazonS3.listBuckets());
-        amazonS3.putObject(bucketName, path, file.getInputStream(), new ObjectMetadata());
-        return "File saved";
+        
+        try {
+            amazonS3.putObject(bucketName, path, file.getInputStream(), new ObjectMetadata());
+            return true;
+        } catch (AmazonServiceException e) {
+            log.error("Error while uploading file. BucketName: {}, Path: {}, FileName: {}", 
+                bucketName, 
+                path, 
+                file.getOriginalFilename());
+
+            return false;
+        }
     }
 }

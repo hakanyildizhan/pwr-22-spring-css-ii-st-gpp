@@ -1,15 +1,14 @@
 package com.groupprogrammingproject.drive.files.list;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.groupprogrammingproject.drive.Utils;
 import com.groupprogrammingproject.drive.exception.NonexistentObjectException;
 import com.groupprogrammingproject.drive.files.dto.FileItem;
 
@@ -23,19 +22,18 @@ public class FileListController {
 
     private final FileListService fileListService;
 
-    @GetMapping(value = FILES_ENDPOINT + "/getFiles")
-    public ResponseEntity<List<FileItem>> getFiles(@RequestParam("path") String path) {
+    @GetMapping(value = FILES_ENDPOINT + "/list")
+    public ResponseEntity<List<FileItem>> getFilesAndFolders(@RequestParam("parentFolder") String parentFolderId) {
         try {
             String userId = SecurityContextHolder.getContext().getAuthentication().getName();
 
-            if (path == "." || path == ".\\" || path.isBlank()) {
-                path = '/' + userId + '/';
+            if (Utils.isRootPath(parentFolderId)) {
+                parentFolderId = userId;
             }
             
-            List<FileItem> files = fileListService.getFilesUnderPath(path);
-            HttpHeaders headers = new HttpHeaders();
+            List<FileItem> files = fileListService.getFilesAndFoldersUnderPath(parentFolderId);
+
             return ResponseEntity.ok()
-                    .headers(headers)
                     .contentType(MediaType.APPLICATION_JSON)
                     .body(files);
         } catch (NonexistentObjectException e) {

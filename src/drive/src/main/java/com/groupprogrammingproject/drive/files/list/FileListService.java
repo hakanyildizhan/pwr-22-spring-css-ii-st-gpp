@@ -3,6 +3,7 @@ package com.groupprogrammingproject.drive.files.list;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
+import com.groupprogrammingproject.drive.Utils;
 import com.groupprogrammingproject.drive.domain.file.Item;
 import com.groupprogrammingproject.drive.domain.file.ItemRepository;
 import com.groupprogrammingproject.drive.exception.NonexistentObjectException;
@@ -10,15 +11,11 @@ import com.groupprogrammingproject.drive.files.dto.FileItem;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Slf4j
 @Service
@@ -32,9 +29,11 @@ public class FileListService {
     @Value("${amazon.s3.bucket}")
     private String bucketName;
 
-    public List<FileItem> getFilesUnderPath(String path) {
+    public List<FileItem> getFilesAndFoldersUnderPath(String path) {
+        // get files
         ObjectListing objects = amazonS3.listObjects(bucketName, path);
         List<S3ObjectSummary> objectSummaryList = objects.getObjectSummaries();
+        objectSummaryList = Utils.stream(objectSummaryList).filter(o -> !o.getKey().replace(path + "/", "").contains("/")).toList();
         List<FileItem> items = new ArrayList<>();
         for (S3ObjectSummary obj : objectSummaryList) {
             Item itemDB = itemRepository.findById(obj.getKey()).orElseThrow(NonexistentObjectException::new);
@@ -43,10 +42,14 @@ public class FileListService {
                 FileItem item = new FileItem(itemDB.getName(), itemDB.getId().toString(), itemDB.getType());
                 items.add(item);
             } else {
-                log.error("No item found in bucket with key {0}", obj.getKey());
+                log.error("No item found in bucket with key {}", obj.getKey());
             }
-            
         }
+
+        // get folders
+        List<Item> folders = itemRepository.findAllUnderPath(path);
+        List<FileItem> foldersDto = Utils.stream(folders).map(f -> new FileItem(f.getName(), f.getId(), f.getType())).toList();
+        items.addAll(foldersDto);
         return items;
     }
 }
