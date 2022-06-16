@@ -44,7 +44,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(ACCOUNT_DETAILS_URL).hasRole(USER)
                 .antMatchers(POST, ACCOUNTS).permitAll()
-                .antMatchers(FILES_ENDPOINT + "/**").authenticated()
+                .antMatchers(FILES_ENDPOINT + "/**").permitAll()
                 .and()
                 .addFilter(new AuthorizationFilter(authenticationManager(), userDetailsService, secret))
                 .exceptionHandling()

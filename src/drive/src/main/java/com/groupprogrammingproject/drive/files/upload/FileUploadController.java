@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,10 +23,9 @@ public class FileUploadController {
 
     private final FileUploadService fileUploadService;
     private final ItemRepository itemRepository;
-    //private final AuthorizationDataRepository accountRepository;
 
     @PostMapping(FILES_ENDPOINT + "/upload")
-    public ResponseEntity<String> uploadFile(@RequestPart(value = "file") MultipartFile file, @RequestPart(value = "parentFolder") String parentFolder) {
+    public ResponseEntity<String> uploadFile(@RequestPart(value = "file") MultipartFile file, @RequestParam(value = "parentFolder") String parentFolder) {
         try {
             String fileKey = UUID.randomUUID().toString();
             String fileFriendlyName = file.getOriginalFilename();
@@ -51,7 +51,7 @@ public class FileUploadController {
     }
 
     @PostMapping(FILES_ENDPOINT + "/createFolder")
-    public ResponseEntity<String> createFolder(@RequestPart(value = "folderName") String folderName, @RequestPart(value = "parentFolder") String parentFolder) {
+    public ResponseEntity<String> createFolder(@RequestParam(value = "folderName") String folderName, @RequestParam(value = "parentFolder") String parentFolder) {
         String parentPath = getFolderFullPathByFolderId(parentFolder);
         String folderKey = UUID.randomUUID().toString();
         String newFolderFullPath = Utils.createFilePath(parentPath, folderKey);
