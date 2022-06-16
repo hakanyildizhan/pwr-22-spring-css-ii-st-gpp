@@ -25,7 +25,7 @@ public class FileUploadController {
     private final ItemRepository itemRepository;
 
     @PostMapping(FILES_ENDPOINT + "/upload")
-    public ResponseEntity<String> uploadFile(@RequestPart(value = "file") MultipartFile file, @RequestParam(value = "parentFolder") String parentFolder) {
+    public ResponseEntity<String> uploadFile(@RequestPart(value = "file") MultipartFile file, @RequestPart(value = "parentFolder") String parentFolder) {
         try {
             String fileKey = UUID.randomUUID().toString();
             String fileFriendlyName = file.getOriginalFilename();
@@ -51,7 +51,7 @@ public class FileUploadController {
     }
 
     @PostMapping(FILES_ENDPOINT + "/createFolder")
-    public ResponseEntity<String> createFolder(@RequestParam(value = "folderName") String folderName, @RequestParam(value = "parentFolder") String parentFolder) {
+    public ResponseEntity<String> createFolder(@RequestPart(value = "folderName") String folderName, @RequestPart(value = "parentFolder") String parentFolder) {
         String parentPath = getFolderFullPathByFolderId(parentFolder);
         String folderKey = UUID.randomUUID().toString();
         String newFolderFullPath = Utils.createFilePath(parentPath, folderKey);
