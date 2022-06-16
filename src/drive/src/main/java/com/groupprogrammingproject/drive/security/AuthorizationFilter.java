@@ -5,13 +5,11 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.groupprogrammingproject.drive.authentication.service.UserDetailsServiceWrapper;
 
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,8 +22,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import static java.util.Objects.nonNull;
 
@@ -63,12 +59,8 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
                 error = "Internal error";
             }
 
-            Map<String, Object> errorDetails = new HashMap<>();
-            errorDetails.put("message", error);
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
-            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.writeValue(response.getWriter(), errorDetails);
+            response.getWriter().print(error);
             filterChain.doFilter(request, response);
             return;
         }
