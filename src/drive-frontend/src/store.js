@@ -11,6 +11,11 @@ export const store = reactive({
     this.token = token;
     sessionStorage.setItem('jwttoken', token)
   },
+  logout() {
+    this.token = null;
+    this.user = null;
+    sessionStorage.removeItem('jwttoken');
+  },
   getUser() {
     this.user ??= sessionStorage.getItem('user')
     return this.user;
