@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.groupprogrammingproject.drive.Utils;
@@ -22,8 +22,8 @@ public class FileListController {
 
     private final FileListService fileListService;
 
-    @GetMapping(value = FILES_ENDPOINT + "/list")
-    public ResponseEntity<List<FileItem>> getFilesAndFolders(@RequestParam("parentFolder") String parentFolderId) {
+    @PostMapping(value = FILES_ENDPOINT + "/list")
+    public ResponseEntity<List<FileItem>> getFilesAndFolders(@RequestPart("parentFolder") String parentFolderId) {
         try {
             String userId = SecurityContextHolder.getContext().getAuthentication().getName();
             boolean root = false;
