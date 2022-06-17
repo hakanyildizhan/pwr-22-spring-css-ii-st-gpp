@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.ObjectUtils;
 
-import static com.amazonaws.regions.Regions.EU_WEST_1;
+import static com.amazonaws.regions.Regions.EU_CENTRAL_1;
 
 @Configuration
 @EnableDynamoDBRepositories(basePackageClasses = { AuthorizationDataRepository.class, ItemRepository.class })
@@ -43,7 +43,7 @@ public class AWSServicesConfig {
         if (!ObjectUtils.isEmpty(amazonDynamoDBEndpoint)) {
             amazonS3 = AmazonS3ClientBuilder.standard()
                     .withCredentials(new AWSStaticCredentialsProvider(amazonAWSCredentials()))
-                    .withEndpointConfiguration(new EndpointConfiguration(amazonS3Endpoint, EU_WEST_1.getName()))
+                    .withEndpointConfiguration(new EndpointConfiguration(amazonS3Endpoint, EU_CENTRAL_1.getName()))
                     .build();
         }
         return amazonS3;
@@ -58,7 +58,7 @@ public class AWSServicesConfig {
         if (!ObjectUtils.isEmpty(amazonDynamoDBEndpoint)) {
             amazonDynamoDB = AmazonDynamoDBClientBuilder.standard()
                     .withCredentials(new AWSStaticCredentialsProvider(amazonAWSCredentials()))
-                    .withEndpointConfiguration(new EndpointConfiguration(amazonDynamoDBEndpoint, EU_WEST_1.getName()))
+                    .withEndpointConfiguration(new EndpointConfiguration(amazonDynamoDBEndpoint, EU_CENTRAL_1.getName()))
                     .build();
         }
 
