@@ -1,22 +1,20 @@
 <template>
-  <v-app id='App'>
+  <v-app id="App">
     <myAppbar />
     <sideNavigation />
-    <fileItemList />
+    <router-view />
   </v-app>
 </template>
 
 <script>
-import myAppbar from '../components/public/myAppbar';
-import fileItemList from '../components/public/fileItemList';
-import sideNavigation from '../components/public/sideNavigation'
+import myAppbar from "../components/public/myAppbar";
+import sideNavigation from "../components/public/sideNavigation";
 
 export default {
-  name: 'DashboardView',
+  name: "DashboardView",
 
   components: {
     myAppbar,
-    fileItemList,
     sideNavigation,
   },
 
