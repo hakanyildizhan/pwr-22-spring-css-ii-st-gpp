@@ -38,3 +38,18 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+def activeProfile = 'dev' // default
+
+task setActiveProfile {
+	dependsOn 'bootRun'
+	doFirst {
+		activeProfileArg = System.getenv('spring.profiles.active')
+		activeProfile = activeProfileArg == null ? activeProfile : activeProfileArg
+		System.setProperty('spring.profiles.active', activeProfile)
+	}
+}
+
+bootRun {
+  args = ["--spring.profiles.active=" + activeProfile]
+}
