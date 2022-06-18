@@ -1,8 +1,14 @@
 <template>
+<div>
   <v-main v-contextmenu:contextmenu>
     <v-container fluid class="grey lighten-5 mb-6">
       <!-- end data table  -->
-      <div class="item-type">Folders</div>
+      <!-- <div class="item-type">Folders</div> -->
+      <v-container>
+        <v-card elevation="0" outlined>
+          <v-card-header>Folders</v-card-header>
+        </v-card>
+      </v-container>
       <div
         class="drop-zone"
         @drop="onDrop($event)"
@@ -16,6 +22,7 @@
             cols="3"
             sm="2"
             md="3"
+            v-on:dblclick="goToRoute(element.id)"
           >
             <div
               class="drag-el"
@@ -45,7 +52,6 @@
           </div>
         </v-col>
       </v-row>
-
     </v-container>
 
     <v-btn
@@ -62,39 +68,43 @@
   </v-main>
 
   <v-contextmenu ref="contextmenu">
-    <v-contextmenu-item @click="openCreateFolderPopup">Create Folder</v-contextmenu-item>
+    <v-contextmenu-item @click="openCreateFolderPopup"
+      >Create Folder</v-contextmenu-item
+    >
   </v-contextmenu>
 
   <div class="text-center">
-    <v-dialog
-      v-model="createFolderPopupIsVisible"
-    >
-      <v-card width="300" style="padding:20px;">
-
-          <v-text-field
-            v-model="folderToCreate"
-            label="Folder Name"
-            variant="outlined"
-            shaped clearable
-          ></v-text-field>
+    <v-dialog v-model="createFolderPopupIsVisible">
+      <v-card width="300" style="padding: 20px">
+        <v-text-field
+          v-model="folderToCreate"
+          label="Folder Name"
+          variant="outlined"
+          shaped
+          clearable
+        ></v-text-field>
 
         <v-card-actions>
           <v-row>
             <v-col sm="6" align="center" justify="center">
-              <v-btn color="primary" @click="createFolderPopupIsVisible = false; this.folderToCreate = 'New folder'">Cancel</v-btn>
+              <v-btn
+                color="primary"
+                @click="
+                  createFolderPopupIsVisible = false;
+                  this.folderToCreate = 'New folder';
+                "
+                >Cancel</v-btn
+              >
             </v-col>
             <v-col sm="6" align="center" justify="center">
               <v-btn color="primary" @click="createFolder">Create</v-btn>
             </v-col>
           </v-row>
-          
-          
         </v-card-actions>
-
       </v-card>
     </v-dialog>
   </div>
-
+  </div>
 </template>
 
 <script>
@@ -204,6 +214,16 @@ export default {
     //   }
   },
   methods: {
+    goToRoute(id) {
+      this.$router.push({
+        name: "folder",
+        params: {
+          folderId: id,
+        },
+      });
+
+      // console.log("id" + route);
+    },
     getFolders() {
       return this.items.filter((item) => item.type == "folder");
     },
@@ -281,16 +301,16 @@ export default {
     createFolder() {
       this.createFolderPopupIsVisible = false;
       let folder = this.folderToCreate;
-      this.folderToCreate = 'New folder';
+      this.folderToCreate = "New folder";
       if (!folder) {
         return;
       }
-      
+
       this.loading = true;
       const formData = new FormData();
       formData.append("folderName", folder);
       formData.append("parentFolder", this.currentPath);
-      
+
       const requestOptions = {
         method: "POST",
         headers: {
@@ -298,12 +318,15 @@ export default {
         },
         body: formData,
       };
-      fetch(process.env.VUE_APP_BACKEND_URL + "/files/createFolder", requestOptions)
+      fetch(
+        process.env.VUE_APP_BACKEND_URL + "/files/createFolder",
+        requestOptions
+      )
         .then((response) => {
           this.loading = false;
           if (!response.ok) {
             // show error
-            throw("Server responded with " + response.status);
+            throw "Server responded with " + response.status;
           } else {
             return response;
           }
@@ -319,7 +342,7 @@ export default {
           this.showErrorSnack = true;
           this.loading = false;
         });
-    }
+    },
   },
 };
 </script>
