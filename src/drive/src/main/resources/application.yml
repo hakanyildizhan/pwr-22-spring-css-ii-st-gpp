@@ -16,15 +16,6 @@ spring:
 
 drive:
   secret: default-secret
-amazon:
-  s3:
-    bucket: drive
-    endpoint: http://s3.localhost.localstack.cloud:4566/
-  dynamodb:
-    endpoint: http://localhost:8000/
-  aws:
-    accesskey: test
-    secretkey: test
 
 management:
   endpoints:

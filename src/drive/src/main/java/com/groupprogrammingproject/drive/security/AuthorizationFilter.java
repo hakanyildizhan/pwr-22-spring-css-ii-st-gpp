@@ -60,8 +60,7 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
             }
 
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
-            response.getWriter().print(error);
-            filterChain.doFilter(request, response);
+            response.getOutputStream().print(error);
             return;
         }
 

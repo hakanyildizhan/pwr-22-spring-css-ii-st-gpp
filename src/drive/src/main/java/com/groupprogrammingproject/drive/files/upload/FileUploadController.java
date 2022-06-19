@@ -1,10 +1,11 @@
 package com.groupprogrammingproject.drive.files.upload;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,8 +14,10 @@ import com.groupprogrammingproject.drive.domain.file.Item;
 import com.groupprogrammingproject.drive.domain.file.ItemRepository;
 import com.groupprogrammingproject.drive.domain.file.ItemType;
 
+import java.util.Optional;
 import java.util.UUID;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class FileUploadController {
@@ -26,9 +29,11 @@ public class FileUploadController {
 
     @PostMapping(FILES_ENDPOINT + "/upload")
     public ResponseEntity<String> uploadFile(@RequestPart(value = "file") MultipartFile file, @RequestPart(value = "parentFolder") String parentFolder) {
+        
+        String fileKey = UUID.randomUUID().toString();
+        String fileFriendlyName = file.getOriginalFilename();
+
         try {
-            String fileKey = UUID.randomUUID().toString();
-            String fileFriendlyName = file.getOriginalFilename();
             String parentPath = getFolderFullPathByFolderId(parentFolder);
             String filePath = Utils.createFilePath(parentPath, fileKey);
 
@@ -46,6 +51,12 @@ public class FileUploadController {
                 return ResponseEntity.internalServerError().build();
             }
         } catch (Exception e) {
+            log.error("Error while uploading file \"{}\": {}", fileFriendlyName, e.getMessage());
+            Optional<Item> itemOnDb = itemRepository.findById(fileKey);
+            if (itemOnDb.isPresent()) {
+                itemRepository.delete(itemOnDb.get());
+            }
+            
             return ResponseEntity.internalServerError().build();
         }
     }
