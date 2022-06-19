@@ -49,9 +49,7 @@ public class FileListService {
         for (S3ObjectSummary obj : objectSummaryList) {
             String fileId = Utils.getFileKeyFromFullPath(obj.getKey());
             Item itemDB = itemRepository.findById(fileId).orElseThrow(NonexistentObjectException::new);
-            PersonalFileShare personalFileShare = personalFileShareRepository.findById(fileId)
-                    .orElse(null);
-            if (!path.startsWith(userId) || !(personalFileShare != null && personalFileShare.getPersonalAccess().contains(userId))) {
+            if (!path.startsWith(userId)) {
                 continue;
             }
             if (itemDB != null) {
