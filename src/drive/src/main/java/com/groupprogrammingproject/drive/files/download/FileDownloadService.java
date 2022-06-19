@@ -43,7 +43,9 @@ public class FileDownloadService {
         String path = item.getPath();
         String userId = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        if (!path.startsWith(userId)) {
+        PersonalFileShare personalFileShare = personalFileShareRepository.findById(key)
+                .orElse(null);
+        if (!path.startsWith(userId) || !(personalFileShare.getPersonalAccess().contains(userId))) {
             throw new UnauthorizedFileAccessException();
         }
         try {
