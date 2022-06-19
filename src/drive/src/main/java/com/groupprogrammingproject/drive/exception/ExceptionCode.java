@@ -8,4 +8,6 @@ public class ExceptionCode {
     public static final String ACCOUNT_IS_BLOCKED = "004";
 
     public static final String ACCOUNT_ALREADY_EXISTS = "005";
+
+    public static final String NONEXISTENT_FOLDER_CODE = "006";
 }

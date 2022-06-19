@@ -9,4 +9,6 @@ public class ExceptionMessage {
     public static final String ACCOUNT_INACTIVE_MESSAGE = "Your account inactive. Please confirm your email";
 
     public static final String ACCOUNT_ALREADY_EXISTS = "Account with given email already exists";
+
+    public static final String NONEXISTENT_FOLDER_MESSAGE = "Folder doea not exist";
 }
