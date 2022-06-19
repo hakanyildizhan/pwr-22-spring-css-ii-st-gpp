@@ -8,4 +8,9 @@ public class ExceptionCode {
     public static final String ACCOUNT_IS_BLOCKED = "004";
 
     public static final String ACCOUNT_ALREADY_EXISTS = "005";
+
+    public static final String NONEXISTENT_OBJECT = "006";
+
+    public static final String UNAUTHORIZED_FILE_ACCESS = "007";
+
 }
