@@ -8,7 +8,7 @@ import com.groupprogrammingproject.drive.domain.file.ItemType;
 import com.groupprogrammingproject.drive.exception.NonexistentObjectException;
 import com.groupprogrammingproject.drive.files.move.dto.FileMoveRequest;
 import com.groupprogrammingproject.drive.files.move.dto.FileMoveResponse;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,7 +19,7 @@ import java.util.List;
 
 @Slf4j
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class FileMoveService {
 
     private final AmazonS3 amazonS3;
@@ -48,6 +48,7 @@ public class FileMoveService {
             Item movedItem = switch (item.getType()) {
                 case ItemType.FOLDER -> moveFolder(item, folder);
                 case ItemType.FILE -> moveFile(item, folder);
+                default -> null;
             };
 
             return new FileMoveResponse(movedItem.getPath());
