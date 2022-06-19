@@ -15,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Slf4j
@@ -29,21 +30,16 @@ public class FileMoveService {
     @Value("${amazon.s3.bucket}")
     private String bucketName;
 
-    public FileMoveResponse move(FileMoveRequest fileMoveRequest, String userId) {
+    public FileMoveResponse move(FileMoveRequest fileMoveRequest) {
         try {
             Item item = itemRepository.findById(fileMoveRequest.getItemId()).get();
-            Item folder = itemRepository.findById(fileMoveRequest.getNewParentItemId()).get();
+            Item folder = itemRepository.findById(fileMoveRequest.getNewParentItemId()).orElse(new Item());
             String parentPath = getFolderFullPathByFolderId(fileMoveRequest.getNewParentItemId());
+            folder.setPath(parentPath);
 
-            // check if folder already exists
-            Item existingFolder = Utils.stream(itemRepository.findAll())
-                    .filter(i -> i.getPath().equals(parentPath))
-                    .findFirst()
-                    .orElse(null);
-
-            if (existingFolder == null || existingFolder.getType() != ItemType.FOLDER) throw new Exception();
+            if (folder.getType() != ItemType.FOLDER && !Utils.isRootPath(parentPath)) throw new Exception("Destination need to be a folder");
             if (Utils.isRootPath(item.getPath())) throw new Exception("Cannot move root folder");
-            if (Utils.isRootPath(folder.getPath())) folder.setPath(userId);
+            if (item.getPath().equalsIgnoreCase(folder.getPath())) throw new Exception("Cannot move to the same folder");
 
             Item movedItem = switch (item.getType()) {
                 case ItemType.FOLDER -> moveFolder(item, folder);
@@ -53,36 +49,46 @@ public class FileMoveService {
 
             return new FileMoveResponse(movedItem.getPath());
         } catch (Exception e) {
-            throw new NonexistentObjectException();
+            throw new NonexistentObjectException(e.getMessage());
         }
     }
 
     private Item moveFile(Item file, Item folder) {
-        amazonS3.copyObject(bucketName, file.getPath(), bucketName, folder.getPath());
+        amazonS3.copyObject(bucketName, file.getPath(), bucketName, Utils.createFilePath(folder.getPath(), file.getId()));
         amazonS3.deleteObject(bucketName, file.getPath());
-        file.setPath(folder.getPath());
+        file.setPath(Utils.createFilePath(folder.getPath(), file.getId()));
         return itemRepository.save(file);
     }
 
     @Transactional
     private Item moveFolder(Item folder, Item newFolder) {
+        String newPath = Utils.createFilePath(newFolder.getPath(), folder.getId());
+
         List<Item> allFiles = itemRepository.findAllUnderPath(Utils.getFileKeyFromFullPath(folder.getPath()));
         List<Item> folders = allFiles.stream().filter(item -> item.getType() == ItemType.FOLDER).toList(); // .sorted(Comparator.comparingInt(s -> s.getPath().length()))
         List<Item> files = allFiles.stream().filter(item -> item.getType() == ItemType.FILE).toList();
+
+        // folders.sort(Comparator.comparingInt(s -> s.getPath().length()));
         for (Item f : folders) {
-            f.setPath(f.getPath().replaceFirst(folder.getPath(), newFolder.getPath()));
+            String newFilePath = f.getPath().replaceFirst(folder.getPath(), newFolder.getPath());
+            // amazonS3.copyObject(bucketName, f.getPath(), bucketName, newFilePath);
+            // amazonS3.deleteObject(bucketName, f.getPath());
+
+            f.setPath(newFilePath);
             itemRepository.save(f);
-            // this.moveFolder(f, newFolder);
         }
         for (Item f : files) {
-            f.setPath(f.getPath().replaceFirst(folder.getPath(), newFolder.getPath()));
+            String newFolderPath = f.getPath().replaceFirst(folder.getPath(), newFolder.getPath());
+            amazonS3.copyObject(bucketName, f.getPath(), bucketName, newFolderPath);
+            amazonS3.deleteObject(bucketName, f.getPath());
+
+            f.setPath(newFolderPath);
             itemRepository.save(f);
-            // this.moveFile(f, newFolder);
         }
 
-        amazonS3.copyObject(bucketName, folder.getPath(), bucketName, newFolder.getPath());
+        amazonS3.copyObject(bucketName, folder.getPath(), bucketName, newPath);
         amazonS3.deleteObject(bucketName, folder.getPath());
-        folder.setPath(newFolder.getPath());
+        folder.setPath(newPath);
 
         return itemRepository.save(folder);
     }

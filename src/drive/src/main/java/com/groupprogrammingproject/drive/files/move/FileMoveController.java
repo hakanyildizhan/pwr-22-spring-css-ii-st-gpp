@@ -34,7 +34,7 @@ public class FileMoveController {
 
     @PostMapping(value = FILES_ENDPOINT + "/moveItem")
     public FileMoveResponse fileMove(@RequestBody @Valid FileMoveRequest fileMoveRequest) {
-        return fileMoveService.move(fileMoveRequest, SecurityContextHolder.getContext().getAuthentication().getName());
+        return fileMoveService.move(fileMoveRequest);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

@@ -4,10 +4,6 @@ services:
     image: amazon/dynamodb-local
     ports:
       - "8000:8000"
-  drive:
-    image: gpp/drive
-    ports:
-      - "8080:8080"
   localstack:
     container_name: "${LOCALSTACK_DOCKER_NAME-localstack_main}"
     image: localstack/localstack

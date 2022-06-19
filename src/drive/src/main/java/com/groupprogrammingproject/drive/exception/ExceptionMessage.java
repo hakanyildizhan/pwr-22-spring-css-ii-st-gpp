@@ -10,5 +10,5 @@ public class ExceptionMessage {
 
     public static final String ACCOUNT_ALREADY_EXISTS = "Account with given email already exists";
 
-    public static final String NONEXISTENT_FOLDER_MESSAGE = "Folder doea not exist";
+    public static final String NONEXISTENT_FOLDER_MESSAGE = "Folder does not exist";
 }
