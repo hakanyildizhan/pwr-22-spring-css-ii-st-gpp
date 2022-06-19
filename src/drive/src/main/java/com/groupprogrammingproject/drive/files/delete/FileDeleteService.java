@@ -37,7 +37,7 @@ public class FileDeleteService {
             itemRepository.deleteById(key);
             amazonS3.deleteObject(bucketName, key);
         } catch (Exception e) {
-            log.error("Error while deleting item from bucket: {0]", e.getMessage());
+            log.error("Error while deleting item: {}", e.getMessage());
         }
     }
 }
