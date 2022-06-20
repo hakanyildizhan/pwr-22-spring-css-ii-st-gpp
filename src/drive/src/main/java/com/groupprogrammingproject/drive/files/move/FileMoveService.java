@@ -37,6 +37,10 @@ public class FileMoveService {
             String parentPath = getFolderFullPathByFolderId(fileMoveRequest.getNewParentItemId());
             folder.setPath(parentPath);
 
+            System.err.println(item.getPath());
+            System.err.println(folder.getPath());
+
+            if (folder.getType() == null) folder.setType(ItemType.FOLDER);
             if (folder.getType() != ItemType.FOLDER && !Utils.isRootPath(parentPath)) throw new Exception("Destination need to be a folder");
             if (Utils.isRootPath(item.getPath())) throw new Exception("Cannot move root folder");
             if (item.getPath().equalsIgnoreCase(folder.getPath())) throw new Exception("Cannot move to the same folder");
@@ -63,35 +67,15 @@ public class FileMoveService {
     @Transactional
     private Item moveFolder(Item folder, Item newFolder) {
         String newPath = Utils.createFilePath(newFolder.getPath(), folder.getId());
+        folder.setPath(newPath);
 
-        List<Item> allFiles = itemRepository.findAllUnderPath(Utils.getFileKeyFromFullPath(folder.getPath()));
-        List<Item> folders = allFiles.stream().filter(item -> item.getType() == ItemType.FOLDER).toList(); // .sorted(Comparator.comparingInt(s -> s.getPath().length()))
+        List<Item> allFiles = itemRepository.findAllUnderPath(folder.getId());
+        List<Item> folders = allFiles.stream().filter(item -> item.getType() == ItemType.FOLDER).toList();
         List<Item> files = allFiles.stream().filter(item -> item.getType() == ItemType.FILE).toList();
 
         // folders.sort(Comparator.comparingInt(s -> s.getPath().length()));
-        System.err.println("Tuuu1");
-        for (Item f : folders) {
-            String newFolderPath = Utils.createFilePath(newPath, f.getId()); // f.getPath().replaceFirst(folder.getPath(), newFolder.getPath());
-            // amazonS3.copyObject(bucketName, f.getPath(), bucketName, newFilePath);
-            // amazonS3.deleteObject(bucketName, f.getPath());
-
-            f.setPath(newFolderPath);
-            itemRepository.save(f);
-        }
-        System.err.println("Tuuu2");
-        for (Item f : files) {
-            String newFilePath = Utils.createFilePath(newPath, f.getId());// f.getPath().replaceFirst(folder.getPath(), newFolder.getPath());
-            amazonS3.copyObject(bucketName, f.getPath(), bucketName, newFilePath);
-            amazonS3.deleteObject(bucketName, f.getPath());
-
-            f.setPath(newFilePath);
-            itemRepository.save(f);
-        }
-        System.err.println("Tuuu3");
-
-        // amazonS3.copyObject(bucketName, folder.getPath(), bucketName, newPath);
-        // amazonS3.deleteObject(bucketName, folder.getPath());
-        folder.setPath(newPath);
+        for (Item f : folders) moveFolder(f, folder);
+        for (Item f : files) moveFile(f, newFolder);
 
         return itemRepository.save(folder);
     }
