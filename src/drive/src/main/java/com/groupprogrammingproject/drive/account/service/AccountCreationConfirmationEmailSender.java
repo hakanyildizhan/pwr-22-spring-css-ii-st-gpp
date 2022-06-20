@@ -19,4 +19,13 @@ public class AccountCreationConfirmationEmailSender {
         message.setText("Thank you for creating the account. In order to activate it, please click the link: localhost:8080/accounts?action=activation&activationId=" + activationId);
         emailSender.send(message);
     }
+
+    public void sendRecoveryToken(String email, String token) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("noreply@baeldung.com");
+        message.setTo(email);
+        message.setSubject("Reset your password");
+        message.setText("In order to reset your password use that token: " + token);
+        emailSender.send(message);
+    }
 }

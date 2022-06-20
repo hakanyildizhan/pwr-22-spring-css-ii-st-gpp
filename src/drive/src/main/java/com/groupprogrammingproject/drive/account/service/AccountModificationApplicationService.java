@@ -1,16 +1,17 @@
 package com.groupprogrammingproject.drive.account.service;
 
-import com.groupprogrammingproject.drive.account.dto.AccountCreationRequest;
-import com.groupprogrammingproject.drive.account.dto.AccountCreationResponse;
-import com.groupprogrammingproject.drive.domain.security.AuthorizationData;
-import com.groupprogrammingproject.drive.domain.security.AuthorizationDataRepository;
+import com.groupprogrammingproject.drive.account.dto.*;
+import com.groupprogrammingproject.drive.domain.security.*;
 import com.groupprogrammingproject.drive.exception.AccountWithGivenEmailAlreadyExists;
+import com.groupprogrammingproject.drive.exception.TokenDoesNotExistOrExpiredException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import static com.groupprogrammingproject.drive.domain.security.AccountStatus.ACTIVE;
@@ -27,6 +28,8 @@ public class AccountModificationApplicationService {
     private final PasswordEncoder passwordEncoder;
 
     private final AuthorizationDataRepository authorizationDataRepository;
+
+    private final RecoveryTokenRepository recoveryTokenRepository;
 
     private final AccountCreationConfirmationEmailSender emailSender;
 
@@ -50,6 +53,48 @@ public class AccountModificationApplicationService {
                         log.info("Account {} activated", account.getId());
                     }
                 });
+    }
+
+    @Transactional
+    public ForgotPasswordResponse forgotPassword(ForgotPasswordRequest request) {
+        log.info("Forgot password request for email {}", request.getEmail());
+        final AuthorizationData user = getUserByEmail(request.getEmail());
+        if (user == null) {
+            log.info("Forgot password email was fake");
+            return new ForgotPasswordResponse("We have sent you an e-mail with instruction how to reset your password");
+        }
+
+        List<RecoveryToken> oldTokens = recoveryTokenRepository.findAllByEmail(request.getEmail()).get().stream().filter(elem -> elem.getStatus() == RecoveryTokenStatus.ACTIVE.ordinal()).toList();
+        for (RecoveryToken t : oldTokens) {
+            t.setStatus(RecoveryTokenStatus.INACTIVE.ordinal());
+            recoveryTokenRepository.save(t);
+        }
+
+        final RecoveryToken recoveryToken = recoveryTokenRepository.save(new RecoveryToken(user.getEmail()));
+
+        final String token = recoveryToken.getId();
+        emailSender.sendRecoveryToken(user.getEmail(), token);
+
+        log.info("Forgot password email were send");
+        return new ForgotPasswordResponse("We have sent you an e-mail with instruction how to reset your password");
+    }
+
+    @Transactional
+    public ResetPasswordResponse resetPassword(ResetPasswordRequest request) {
+        log.info("Reset password request for email {}", request.getToken());
+        final RecoveryToken recoveryToken = recoveryTokenRepository.findById(request.getToken()).get();
+
+        if (recoveryToken.getStatus() != RecoveryTokenStatus.ACTIVE.ordinal() || recoveryToken.getExpired().before(new Date())) throw new TokenDoesNotExistOrExpiredException();
+
+        AuthorizationData user = getUserByEmail(recoveryToken.getEmail());
+
+        recoveryToken.setStatus(RecoveryTokenStatus.USED);
+        recoveryTokenRepository.save(recoveryToken);
+
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        authorizationDataRepository.save(user);
+
+        return new ResetPasswordResponse("Password has been changed");
     }
 
     public AuthorizationData getUserByEmail(String email) {

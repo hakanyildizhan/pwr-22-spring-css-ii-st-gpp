@@ -69,25 +69,28 @@ public class FileMoveService {
         List<Item> files = allFiles.stream().filter(item -> item.getType() == ItemType.FILE).toList();
 
         // folders.sort(Comparator.comparingInt(s -> s.getPath().length()));
+        System.err.println("Tuuu1");
         for (Item f : folders) {
-            String newFilePath = f.getPath().replaceFirst(folder.getPath(), newFolder.getPath());
+            String newFolderPath = Utils.createFilePath(newPath, f.getId()); // f.getPath().replaceFirst(folder.getPath(), newFolder.getPath());
             // amazonS3.copyObject(bucketName, f.getPath(), bucketName, newFilePath);
             // amazonS3.deleteObject(bucketName, f.getPath());
-
-            f.setPath(newFilePath);
-            itemRepository.save(f);
-        }
-        for (Item f : files) {
-            String newFolderPath = f.getPath().replaceFirst(folder.getPath(), newFolder.getPath());
-            amazonS3.copyObject(bucketName, f.getPath(), bucketName, newFolderPath);
-            amazonS3.deleteObject(bucketName, f.getPath());
 
             f.setPath(newFolderPath);
             itemRepository.save(f);
         }
+        System.err.println("Tuuu2");
+        for (Item f : files) {
+            String newFilePath = Utils.createFilePath(newPath, f.getId());// f.getPath().replaceFirst(folder.getPath(), newFolder.getPath());
+            amazonS3.copyObject(bucketName, f.getPath(), bucketName, newFilePath);
+            amazonS3.deleteObject(bucketName, f.getPath());
 
-        amazonS3.copyObject(bucketName, folder.getPath(), bucketName, newPath);
-        amazonS3.deleteObject(bucketName, folder.getPath());
+            f.setPath(newFilePath);
+            itemRepository.save(f);
+        }
+        System.err.println("Tuuu3");
+
+        // amazonS3.copyObject(bucketName, folder.getPath(), bucketName, newPath);
+        // amazonS3.deleteObject(bucketName, folder.getPath());
         folder.setPath(newPath);
 
         return itemRepository.save(folder);
