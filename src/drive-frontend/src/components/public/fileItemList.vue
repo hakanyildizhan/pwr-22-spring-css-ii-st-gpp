@@ -180,7 +180,7 @@ export default {
           });
         } else {
           response.text().then((err) => {
-            let error = "An unknown error occurred. Please try again.";
+            // let error = "An unknown error occurred. Please try again.";
             this.showErrorSnack = true;
             if (err == "Token expired") {
               this.store.logout();
@@ -190,7 +190,8 @@ export default {
         }
       })
       .catch((err) => {
-        let error = "An unknown error occurred. Please try again.";
+        console.log("err =>" + err);
+        // let error = "An unknown error occurred. Please try again.";
         this.showErrorSnack = true;
         this.loading = false;
       });
@@ -276,7 +277,7 @@ export default {
           this.loading = false;
           if (!response.ok) {
             // show error
-            let error = "An unknown error occurred. Please try again.";
+            // let error = "An unknown error occurred. Please try again.";
             this.showErrorSnack = true;
           } else {
             return response;
@@ -290,7 +291,8 @@ export default {
           });
         })
         .catch((err) => {
-          let error = "An unknown error occurred. Please try again.";
+          console.log("err=>" + err);
+          // let error = "An unknown error occurred. Please try again.";
           this.showErrorSnack = true;
           this.loading = false;
         });
@@ -339,6 +341,7 @@ export default {
           });
         })
         .catch((err) => {
+          console.log("err" + err);
           this.showErrorSnack = true;
           this.loading = false;
         });
