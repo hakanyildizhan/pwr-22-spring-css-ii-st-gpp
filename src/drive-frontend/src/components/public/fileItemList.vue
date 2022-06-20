@@ -1,14 +1,15 @@
 <template>
 <div>
-  <v-main v-contextmenu:contextmenu>
+  <v-main>
+    <v-container v-contextmenu:contextmenu>
+      <v-breadcrumbs :items="breadcrumbs">
+        <template v-slot:divider>
+          <v-icon icon="mdi-chevron-right"></v-icon>
+        </template>
+      </v-breadcrumbs>
+    </v-container>
     <v-container fluid class="grey lighten-5 mb-6">
-      <!-- end data table  -->
-      <!-- <div class="item-type">Folders</div> -->
-      <v-container>
-        <v-card elevation="0" outlined>
-          <v-card-header>Folders</v-card-header>
-        </v-card>
-      </v-container>
+      <div class="item-type">Folders</div>
       <div
         class="drop-zone"
         @drop="onDrop($event)"
@@ -22,7 +23,7 @@
             cols="3"
             sm="2"
             md="3"
-            v-on:dblclick="goToRoute(element.id)"
+            v-on:dblclick="goToFolder(element.id, element.title)"
           >
             <div
               class="drag-el"
@@ -122,6 +123,12 @@ export default {
   },
   data() {
     return {
+      breadcrumbs: [ 
+        {
+          text: 'Main Folder',
+          disabled: false,
+          href: 'dashboard',
+        }],
       folderToCreate: "New folder",
       createFolderPopupIsVisible: false,
       showMenu: false,
@@ -222,8 +229,54 @@ export default {
           folderId: id,
         },
       });
+    },
+    goToFolder(folderId, folderName) {
+      this.loading = true;
+      const formData = new FormData();
+      formData.append("parentFolder", folderId);
+      const requestOptions = {
+        method: "POST",
+        headers: {
+          Authorization: "Bearer " + this.store.getToken(),
+        },
+        body: formData,
+      };
+      fetch(process.env.VUE_APP_BACKEND_URL + "/files/list", requestOptions)
+      .then((response) => {
+        this.loading = false;
 
-      // console.log("id" + route);
+        if (response.ok) {
+          response.json().then((returnedItems) => {
+            this.items = [];
+            returnedItems.forEach((item) =>
+              this.items.push({
+                id: item.id,
+                type: item.type == 2 ? "file" : "folder",
+                title: item.displayName,
+              })
+            );
+            this.breadcrumbs.push({
+              text: folderName,
+              disabled: false,
+              href: 'dashboard',
+            });
+          });
+        } else {
+          response.text().then((err) => {
+            let error = "An unknown error occurred. Please try again.";
+            this.showErrorSnack = true;
+            if (err == "Token expired") {
+              this.store.logout();
+              this.$router.push({ name: "login" });
+            }
+          });
+        }
+      })
+      .catch((err) => {
+        let error = "An unknown error occurred. Please try again.";
+        this.showErrorSnack = true;
+        this.loading = false;
+      });
     },
     getFolders() {
       return this.items.filter((item) => item.type == "folder");

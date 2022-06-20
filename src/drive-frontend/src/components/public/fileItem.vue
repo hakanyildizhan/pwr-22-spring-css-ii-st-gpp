@@ -1,13 +1,23 @@
 <script>
+import { directive, Contextmenu, ContextmenuItem } from "v-contextmenu";
+import "v-contextmenu/dist/themes/default.css";
+import { store } from "../../store";
+
 export default {
   name: "fileItem",
+  components: {
+    [Contextmenu.name]: Contextmenu,
+    [ContextmenuItem.name]: ContextmenuItem,
+  },
   props: {
     id: String,
     type: String,
     title: String,
   },
   data() {
-    return {};
+    return {
+      store,
+    };
   },
   computed: {
     icon() {
@@ -32,6 +42,9 @@ export default {
       return false;
     },
   },
+  directives: {
+    contextmenu: directive,
+  },
   methods: {
     view() {
       // we can only view a file
@@ -47,19 +60,14 @@ export default {
      }
     },
     download() {
-      const formData = new FormData();
-      formData.append("parentFolder", ".");
-
       const requestOptions = {
-        method: "POST",
+        method: "GET",
         headers: {
           Authorization: "Bearer " + this.store.getToken(),
-        },
-        body: formData,
+        }
       };
-      fetch(
-        process.env.VUE_APP_BACKEND_URL +
-          "/files/downloadFile?" +
+
+      fetch(process.env.VUE_APP_BACKEND_URL + "/files/downloadFile?" +
           new URLSearchParams({
             key: this.id,
           }),
@@ -67,16 +75,14 @@ export default {
           requestOptions,
         }
       )
-        .then((response) => response.blob())
-        .then((blob) => {
-          var url = window.URL.createObjectURL(blob);
-          var a = document.createElement("a");
-          a.href = url;
-          a.download = "filename.xlsx";
-          document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
-          a.click();
-          a.remove();
-        });
+      .then((response) => response.blob())
+      .then((blob) => {
+        const link = document.createElement('a')
+        link.href = URL.createObjectURL(blob)
+        link.download = this.title;
+        link.click()
+        URL.revokeObjectURL(link.href)
+      });
     },
   },
 };
@@ -84,20 +90,20 @@ export default {
 
 <template>
   <v-hover v-slot="{ isHovering, props }">
+    <v-contextmenu ref="contextmenu2">
+      <v-contextmenu-item @click="download">Download</v-contextmenu-item>
+      <v-contextmenu-item>Share</v-contextmenu-item>
+    </v-contextmenu>
     <v-card
       class="pa-2"
       outlined
       tile
       :elevation="isHovering ? 6 : 1"
       v-bind="props"
+      v-contextmenu:contextmenu2
     >
       <v-icon start :icon="icon"></v-icon>
-      <p class="text-wrap">
-        {{ this.title }}
-      </p>
-
-      <v-icon v-if="showView">mdi-eye</v-icon>
-      <v-icon v-if="showDownload">mdi-download</v-icon>
+      {{ this.title }}
     </v-card>
   </v-hover>
 </template>

@@ -4,7 +4,6 @@ import DashboardView from "../views/Dashboard";
 import IndexDashboard from "@/views/index";
 import EmailConfrim from "../views/emailConfirm.vue";
 import LoginView from "@/views/Login.vue";
-import FolderView from "@/views/folder.vue";
 import PageNotFound from "../views/404.vue";
 import { store } from "../store";
 
@@ -23,11 +22,6 @@ const routes = [
         path: "",
         name: "index",
         component: IndexDashboard,
-      },
-      {
-        path: "/folder/:folderId",
-        name: "folder",
-        component: FolderView,
       },
     ],
   },
