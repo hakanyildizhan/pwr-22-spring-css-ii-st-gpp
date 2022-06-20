@@ -11,24 +11,19 @@ import com.groupprogrammingproject.drive.domain.file.share.PersonalFileShare;
 import com.groupprogrammingproject.drive.domain.file.share.PersonalFileShareRepository;
 import com.groupprogrammingproject.drive.domain.security.AuthorizationData;
 import com.groupprogrammingproject.drive.domain.security.AuthorizationDataRepository;
-import com.groupprogrammingproject.drive.exception.AccountWithGivenEmailAlreadyExists;
 import com.groupprogrammingproject.drive.exception.NonexistentAccountException;
 import com.groupprogrammingproject.drive.exception.NonexistentObjectException;
 import com.groupprogrammingproject.drive.exception.UnauthorizedFileAccessException;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static java.util.UUID.randomUUID;
 
-@Slf4j
 @Service
 @AllArgsConstructor
 public class ShareFileService {

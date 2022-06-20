@@ -14,7 +14,6 @@ import com.groupprogrammingproject.drive.files.share.dto.PersonalShareFileReques
 import com.groupprogrammingproject.drive.files.share.dto.PersonalShareFileResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
