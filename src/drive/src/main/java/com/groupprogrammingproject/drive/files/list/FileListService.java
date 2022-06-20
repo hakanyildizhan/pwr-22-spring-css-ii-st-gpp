@@ -60,7 +60,7 @@ public class FileListService {
         }
 
         // get folders
-        List<Item> folders = itemRepository.findAllUnderPath(Utils.getFileKeyFromFullPath(path));
+        List<Item> folders = itemRepository.findAllUnderPath(path);
         List<FileItem> foldersDto = Utils.stream(folders)
             .filter(f -> f.getType() == ItemType.FOLDER)
             .map(f -> new FileItem(f.getName(), f.getId(), f.getType())).toList();
