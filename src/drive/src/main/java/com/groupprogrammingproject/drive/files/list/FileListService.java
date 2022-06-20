@@ -7,8 +7,6 @@ import com.groupprogrammingproject.drive.Utils;
 import com.groupprogrammingproject.drive.domain.file.Item;
 import com.groupprogrammingproject.drive.domain.file.ItemRepository;
 import com.groupprogrammingproject.drive.domain.file.ItemType;
-import com.groupprogrammingproject.drive.domain.file.share.PersonalFileShare;
-import com.groupprogrammingproject.drive.domain.file.share.PersonalFileShareRepository;
 import com.groupprogrammingproject.drive.exception.NonexistentObjectException;
 import com.groupprogrammingproject.drive.exception.UnauthorizedFileAccessException;
 import com.groupprogrammingproject.drive.files.dto.FileItem;
@@ -31,17 +29,20 @@ public class FileListService {
 
     private final ItemRepository itemRepository;
 
-    private final PersonalFileShareRepository personalFileShareRepository;
-
     @Value("${amazon.s3.bucket}")
     private String bucketName;
 
     public List<FileItem> getFilesAndFoldersUnderPath(String folderId, boolean root) {
-        // get files
-
+        
         String path = root ? folderId : itemRepository.findById(folderId).get().getPath();
         String userId = SecurityContextHolder.getContext().getAuthentication().getName();
 
+        if (!path.startsWith(userId)) {
+            log.error("User with ID {} requested to list contents of folder {} which he does not own", userId, path);
+            throw new UnauthorizedFileAccessException();
+        }
+
+        // get files
         ObjectListing objects = amazonS3.listObjects(bucketName, path);
         List<S3ObjectSummary> objectSummaryList = objects.getObjectSummaries();
         objectSummaryList = Utils.stream(objectSummaryList).filter(o -> !o.getKey().replace(path + "/", "").contains("/")).toList();
@@ -49,9 +50,7 @@ public class FileListService {
         for (S3ObjectSummary obj : objectSummaryList) {
             String fileId = Utils.getFileKeyFromFullPath(obj.getKey());
             Item itemDB = itemRepository.findById(fileId).orElseThrow(NonexistentObjectException::new);
-            if (!path.startsWith(userId)) {
-                continue;
-            }
+
             if (itemDB != null) {
                 FileItem item = new FileItem(itemDB.getName(), itemDB.getId().toString(), itemDB.getType());
                 items.add(item);

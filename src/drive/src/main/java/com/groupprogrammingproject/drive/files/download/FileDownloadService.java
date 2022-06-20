@@ -8,7 +8,6 @@ import com.groupprogrammingproject.drive.domain.file.ItemRepository;
 
 import com.groupprogrammingproject.drive.domain.file.share.PersonalFileShare;
 import com.groupprogrammingproject.drive.domain.file.share.PersonalFileShareRepository;
-import com.groupprogrammingproject.drive.exception.NonexistentObjectException;
 import com.groupprogrammingproject.drive.exception.UnauthorizedFileAccessException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,7 +44,8 @@ public class FileDownloadService {
 
         PersonalFileShare personalFileShare = personalFileShareRepository.findById(key)
                 .orElse(null);
-        if (!path.startsWith(userId) || !(personalFileShare.getPersonalAccess().contains(userId))) {
+        if (!path.startsWith(userId) && (personalFileShare == null || !personalFileShare.getPersonalAccess().contains(userId))) {
+            log.error("User {} requested a file with path {} for which he does not have access", userId, path);
             throw new UnauthorizedFileAccessException();
         }
         try {

@@ -37,4 +37,15 @@ public class LinkFileShare {
         return linkId;
     }
 
+    public void setFileId(String id) {
+        this.fileId = id;
+    }
+
+    public void setLinkId(String linkId) {
+        this.linkId = linkId;
+    }
+
+    public void setAccessType(String accessType) {
+        this.accessType = accessType;
+    }
 }
