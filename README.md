@@ -21,13 +21,13 @@ Our group project work for the 2022 spring semester.
     * ~~Basic file upload functionality.~~
     * ~~Users have a max. space limit.~~
 
-* **May 23** (11th class): Beta version: User can also delete and share a file, reset a password.
-    * UI improvements
-	* File upload functionality
-    * Delete and share file functionalities 
-    * Focus on role based authentication
+* ~~**May 23** (11th class): Beta version: User can also delete and share a file, reset a password.~~
+    * ~~UI improvements~~
+	* ~~File upload functionality~~
+    * ~~Delete and share file functionalities~~
+    * ~~Focus on role based authentication~~
 
-* **Jun 13** (14th class): Final version: Fully functional product.
+* **Jun 20** (14th class): Final version: Fully functional product.
     * Complete UI
     * HTTPS support with SSL
     * Set up hosting on AWS EC2
