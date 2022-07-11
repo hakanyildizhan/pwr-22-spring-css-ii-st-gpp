@@ -27,10 +27,10 @@ Our group project work for the 2022 spring semester.
     * ~~Delete and share file functionalities~~
     * ~~Focus on role based authentication~~
 
-* **Jun 20** (14th class): Final version: Fully functional product.
-    * Complete UI
-    * HTTPS support with SSL
-    * Set up hosting on AWS EC2
+* ~~**Jun 20** (14th class): Final version: Fully functional product.~~
+    * ~~Complete UI~~
+    * ~~HTTPS support with SSL~~
+    * ~~Set up hosting on AWS EC2~~
 
 ## Feature list
 
@@ -52,3 +52,6 @@ Our group project work for the 2022 spring semester.
 user will need about 100MB of free space. As the free/test/student version of resources allow storing up to 20 GB of data
 for free, we assume that the project might scale up to 200 users.
 - Taking into account the above estimate, our endpoints should handle the load around 200 requests per minute
+
+# How to run
+- Refer to the README.md files under /drive and /drive-frontend folders.
